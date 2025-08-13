@@ -1,5 +1,4 @@
 // Netlify Function to proxy requests to Google Apps Script and handle CORS
-const fetch = require('node-fetch');
 
 // Google Apps Script URL - configurable via environment variable
 const GOOGLE_APPS_SCRIPT_URL = process.env.GOOGLE_APPS_SCRIPT_URL || 
@@ -90,7 +89,7 @@ exports.handler = async function(event, context) {
     console.log('🌐 Final URL:', scriptUrl);
     console.log('⚙️ Fetch Options:', JSON.stringify(fetchOptions, null, 2));
 
-    // Make request to Google Apps Script
+    // Make request to Google Apps Script using native fetch (Node 18+)
     const response = await fetch(scriptUrl, fetchOptions);
     
     console.log('📥 Google Apps Script Response Status:', response.status);

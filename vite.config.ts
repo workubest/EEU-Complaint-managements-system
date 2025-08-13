@@ -57,18 +57,6 @@ export default defineConfig(({ mode }) => ({
           'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
           'chart-vendor': ['recharts'],
           'utils-vendor': ['date-fns', 'clsx', 'class-variance-authority'],
-          // Feature chunks
-          'dashboard': ['src/pages/Dashboard.tsx', 'src/components/dashboard'],
-          'complaints': ['src/pages/ComplaintForm.tsx', 'src/pages/ComplaintsList.tsx', 'src/pages/ComplaintDetail.tsx'],
-          'analytics': ['src/pages/Analytics.tsx', 'src/pages/Reports.tsx'],
-          'user-management': ['src/pages/UserManagement.tsx', 'src/pages/PermissionManagement.tsx'],
-        },
-        // Optimize chunk sizes
-        chunkFileNames: (chunkInfo) => {
-          const facadeModuleId = chunkInfo.facadeModuleId
-            ? chunkInfo.facadeModuleId.split('/').pop().replace('.tsx', '').replace('.ts', '')
-            : 'chunk';
-          return `js/${facadeModuleId}-[hash].js`;
         },
       },
     },
