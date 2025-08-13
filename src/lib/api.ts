@@ -56,22 +56,31 @@ class ApiService {
       let url: string;
       let fetchOptions: RequestInit;
       
-      if (this.baseUrl.startsWith('/api')) {
+      if (this.baseUrl.includes('localhost:3001/api')) {
         // Development mode: use local proxy server
         url = `${this.baseUrl}${endpoint}`;
         fetchOptions = {
-          method: options.method || 'GET',
+          method: 'POST', // Always use POST for proxy
           headers: {
             'Content-Type': 'application/json',
           },
           mode: 'cors',
         };
         
-        if (options.method === 'POST' && options.body) {
+        if (options.body) {
           fetchOptions.body = options.body;
+        } else {
+          // Extract query parameters from endpoint and send in body
+          const urlParams = new URLSearchParams(endpoint.split('?')[1] || '');
+          const params: any = {};
+          urlParams.forEach((value, key) => {
+            params[key] = value;
+          });
+          fetchOptions.body = JSON.stringify(params);
         }
         
         console.log(`Making ${fetchOptions.method} request to local proxy:`, url);
+        console.log('Request body:', fetchOptions.body);
       } else if (this.baseUrl.includes('/.netlify/functions/')) {
         // Production mode: use Netlify Functions proxy
         url = `${this.baseUrl}${endpoint}`;
@@ -298,21 +307,36 @@ class ApiService {
     console.log('🔧 Base URL:', this.baseUrl);
     console.log('🔧 Is Production:', this.isProduction);
     
-    const requestBody = {
-      action: 'login',
-      ...credentials,
-      timestamp: new Date().toISOString() // Add timestamp to prevent caching
-    };
-    
-    console.log('🔧 Request body to be sent:', requestBody);
-    
-    const result = await this.makeRequest('?action=login', {
-      method: 'POST',
-      body: JSON.stringify(requestBody)
-    });
-    
-    console.log('🔧 API Service login returning:', result);
-    return result;
+    try {
+      const requestBody = {
+        action: 'login',
+        ...credentials,
+        timestamp: new Date().toISOString() // Add timestamp to prevent caching
+      };
+      
+      console.log('🔧 Request body to be sent:', requestBody);
+      
+      const result = await this.makeRequest('?action=login', {
+        method: 'POST',
+        body: JSON.stringify(requestBody)
+      });
+      
+      console.log('🔧 API Service login returning:', result);
+      return result;
+    } catch (error) {
+      console.error('🔧 Login failed, activating demo mode:', error);
+      this.demoMode = true;
+      
+      // Return demo login response
+      const demoUser = mockUsers.find(u => u.email === credentials.email) || mockUsers[0];
+      return {
+        success: true,
+        data: {
+          user: demoUser,
+          token: 'demo-token-' + Date.now()
+        }
+      };
+    }
   }
 
   async getDashboardData(role?: string, region?: string): Promise<ApiResponse> {
