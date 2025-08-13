@@ -533,7 +533,13 @@ export function Reports() {
                   
                   <div>
                     <label className="text-sm font-medium">Regions (Optional)</label>
-                    <Select>
+                    <Select 
+                      value={reportForm.filters.regions[0] || ''} 
+                      onValueChange={(value) => setReportForm(prev => ({ 
+                        ...prev, 
+                        filters: { ...prev.filters, regions: value ? [value] : [] }
+                      }))}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select regions" />
                       </SelectTrigger>
@@ -547,7 +553,13 @@ export function Reports() {
                   
                   <div>
                     <label className="text-sm font-medium">Categories (Optional)</label>
-                    <Select>
+                    <Select 
+                      value={reportForm.filters.categories[0] || ''} 
+                      onValueChange={(value) => setReportForm(prev => ({ 
+                        ...prev, 
+                        filters: { ...prev.filters, categories: value ? [value] : [] }
+                      }))}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select categories" />
                       </SelectTrigger>
@@ -563,7 +575,13 @@ export function Reports() {
                   
                   <div>
                     <label className="text-sm font-medium">Priority Levels (Optional)</label>
-                    <Select>
+                    <Select 
+                      value={reportForm.filters.priorities[0] || ''} 
+                      onValueChange={(value) => setReportForm(prev => ({ 
+                        ...prev, 
+                        filters: { ...prev.filters, priorities: value ? [value] : [] }
+                      }))}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select priorities" />
                       </SelectTrigger>

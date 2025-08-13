@@ -10,7 +10,7 @@ export interface EnvironmentConfig {
 }
 
 // Google Apps Script URL - update this with your own deployment URL
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6Do0ky06Pm6OtY62iTOuSWABmZsQAVdqtaXN27SQb8Hgtv_JqVuMPNdXKh-fW5bU/exec';
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRtSTJjIA9_Hx-SpX95dJ2hRg1SSkEGLlyqjWElWJoiGQWtLzt7pwYeyeycah7KpI/exec';
 
 // Detect environment
 const isProduction = import.meta.env.PROD || !window.location.hostname.includes('localhost');
@@ -24,7 +24,7 @@ const proxyUrl = isPort8080 ? 'http://localhost:3001/api' : 'http://localhost:30
 // Check if we should force real backend in development (set VITE_FORCE_REAL_BACKEND=true)
 const forceRealBackend = import.meta.env.VITE_FORCE_REAL_BACKEND === 'true';
 
-// Demo mode is now disabled - always use real backend
+// Disable demo mode - use live backend data
 const forceDemoMode = false;
 
 // Environment-specific configuration
@@ -32,8 +32,8 @@ export const environment: EnvironmentConfig = {
   isProduction,
   isDevelopment,
   googleAppsScriptUrl: GOOGLE_APPS_SCRIPT_URL,
-  // Use proxy in development, Netlify function in production
-  apiBaseUrl: isProduction ? '/.netlify/functions/proxy' : proxyUrl,
+  // Use direct Google Apps Script URL in development for testing
+  apiBaseUrl: isProduction ? '/.netlify/functions/proxy' : GOOGLE_APPS_SCRIPT_URL,
   forceRealBackend: true,
   forceDemoMode: false
 };

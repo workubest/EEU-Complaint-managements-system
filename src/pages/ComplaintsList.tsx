@@ -63,6 +63,27 @@ const WORK_TYPES = [
   { value: 'other', label: 'Other Work' }
 ];
 
+// Status workflow validation - defines allowed transitions
+const STATUS_WORKFLOW = {
+  'open': ['in-progress', 'escalated', 'cancelled'], // From open: can go to in-progress, escalated, or cancelled
+  'in-progress': ['resolved', 'escalated'], // From in-progress: can go to resolved or escalated
+  'escalated': ['resolved', 'in-progress'], // From escalated: can go to resolved or back to in-progress
+  'resolved': ['closed'], // From resolved: can only go to closed
+  'closed': [], // From closed: no further transitions (final state)
+  'cancelled': [] // From cancelled: no further transitions (final state)
+};
+
+// Helper function to get allowed status transitions
+const getAllowedStatusTransitions = (currentStatus: ComplaintStatus): ComplaintStatus[] => {
+  return STATUS_WORKFLOW[currentStatus] || [];
+};
+
+// Helper function to validate if a status transition is allowed
+const isStatusTransitionAllowed = (currentStatus: ComplaintStatus, newStatus: ComplaintStatus): boolean => {
+  const allowedTransitions = getAllowedStatusTransitions(currentStatus);
+  return allowedTransitions.includes(newStatus);
+};
+
 const ComplaintsList: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -131,8 +152,21 @@ const ComplaintsList: React.FC = () => {
       console.warn('Invalid status value received:', item.Status);
     }
     
+    // Generate a fallback ID if none exists
+    const complaintId = item.ID || item.id || item['Complaint ID'] || item.complaintId;
+    const fallbackId = complaintId || `complaint_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Debug logging for ID issues
+    if (!complaintId) {
+      console.warn('Complaint missing ID, using fallback:', { 
+        originalItem: item, 
+        fallbackId,
+        availableKeys: Object.keys(item)
+      });
+    }
+    
     const mappedData = {
-    id: item.ID || item.id || '',
+    id: fallbackId,
     customerId: item['Customer ID'] || item.customerId || '1',
     title: item.Title || item.title || '',
     description: item.Description || item.description || '',
@@ -183,9 +217,96 @@ const ComplaintsList: React.FC = () => {
            status !== 'closed' && 
            status !== 'cancelled';
   };
+
+  // Helper function to get date range based on filter
+  const getDateRange = (filter: string) => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    switch (filter) {
+      case 'today':
+        return {
+          from: today,
+          to: new Date(today.getTime() + 24 * 60 * 60 * 1000 - 1)
+        };
+      case 'yesterday':
+        const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+        return {
+          from: yesterday,
+          to: new Date(yesterday.getTime() + 24 * 60 * 60 * 1000 - 1)
+        };
+      case 'last7days':
+        return {
+          from: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000),
+          to: now
+        };
+      case 'last30days':
+        return {
+          from: new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000),
+          to: now
+        };
+      case 'thisweek':
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        return {
+          from: startOfWeek,
+          to: now
+        };
+      case 'thismonth':
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        return {
+          from: startOfMonth,
+          to: now
+        };
+      case 'lastmonth':
+        const startOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const endOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59);
+        return {
+          from: startOfLastMonth,
+          to: endOfLastMonth
+        };
+      case 'custom':
+        if (customDateFrom && customDateTo) {
+          return {
+            from: new Date(customDateFrom),
+            to: new Date(customDateTo + 'T23:59:59')
+          };
+        }
+        return null;
+      default:
+        return null;
+    }
+  };
+
+  // Helper function to check if complaint matches date filter
+  const matchesDateFilter = (complaint: any) => {
+    if (dateFilter === 'all') return true;
+    
+    const dateRange = getDateRange(dateFilter);
+    if (!dateRange) return true;
+    
+    const complaintDate = new Date(complaint.createdAt);
+    return complaintDate >= dateRange.from && complaintDate <= dateRange.to;
+  };
+
+  // Helper function to get complaint count for a specific date filter
+  const getComplaintCountForDateFilter = (filter: string) => {
+    if (filter === 'all') return complaints.length;
+    
+    const dateRange = getDateRange(filter);
+    if (!dateRange) return 0;
+    
+    return complaints.filter(complaint => {
+      const complaintDate = new Date(complaint.createdAt);
+      return complaintDate >= dateRange.from && complaintDate <= dateRange.to;
+    }).length;
+  };
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [statusFilter, setStatusFilter] = useState<string>(searchParams.get('status') || 'all');
   const [priorityFilter, setPriorityFilter] = useState<string>(searchParams.get('priority') || 'all');
+  const [dateFilter, setDateFilter] = useState<string>(searchParams.get('dateFilter') || 'all');
+  const [customDateFrom, setCustomDateFrom] = useState<string>(searchParams.get('dateFrom') || '');
+  const [customDateTo, setCustomDateTo] = useState<string>(searchParams.get('dateTo') || '');
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -198,12 +319,16 @@ const ComplaintsList: React.FC = () => {
     notes: '',
     resolutionNotes: ''
   });
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   // Handle URL parameter changes
   useEffect(() => {
     const status = searchParams.get('status');
     const priority = searchParams.get('priority');
     const search = searchParams.get('search');
+    const dateFilterParam = searchParams.get('dateFilter');
+    const dateFrom = searchParams.get('dateFrom');
+    const dateTo = searchParams.get('dateTo');
     
     if (status && status !== statusFilter) {
       setStatusFilter(status);
@@ -213,6 +338,15 @@ const ComplaintsList: React.FC = () => {
     }
     if (search && search !== searchTerm) {
       setSearchTerm(search);
+    }
+    if (dateFilterParam && dateFilterParam !== dateFilter) {
+      setDateFilter(dateFilterParam);
+    }
+    if (dateFrom && dateFrom !== customDateFrom) {
+      setCustomDateFrom(dateFrom);
+    }
+    if (dateTo && dateTo !== customDateTo) {
+      setCustomDateTo(dateTo);
     }
   }, [searchParams]);
 
@@ -230,6 +364,15 @@ const ComplaintsList: React.FC = () => {
       if (priorityFilter && priorityFilter !== 'all') {
         params.set('priority', priorityFilter);
       }
+      if (dateFilter && dateFilter !== 'all') {
+        params.set('dateFilter', dateFilter);
+      }
+      if (customDateFrom && dateFilter === 'custom') {
+        params.set('dateFrom', customDateFrom);
+      }
+      if (customDateTo && dateFilter === 'custom') {
+        params.set('dateTo', customDateTo);
+      }
       
       // Only update URL if params have changed
       const newSearch = params.toString();
@@ -240,7 +383,7 @@ const ComplaintsList: React.FC = () => {
     }, 300); // 300ms debounce for search, immediate for dropdowns
     
     return () => clearTimeout(timeoutId);
-  }, [searchTerm, statusFilter, priorityFilter]);
+  }, [searchTerm, statusFilter, priorityFilter, dateFilter, customDateFrom, customDateTo]);
 
   React.useEffect(() => {
     const fetchComplaints = async () => {
@@ -252,7 +395,17 @@ const ComplaintsList: React.FC = () => {
           // Map raw sheet data to expected UI shape and sort by creation date (most recent first)
           const mapped = result.data.map(mapComplaintData).filter(complaint => {
             // Filter out any null/invalid complaints
-            return complaint && complaint.id && complaint.priority && complaint.status;
+            const isValid = complaint && 
+                           complaint.id && 
+                           complaint.id.trim() !== '' && 
+                           complaint.priority && 
+                           complaint.status;
+            
+            if (!isValid) {
+              console.warn('Filtering out invalid complaint:', complaint);
+            }
+            
+            return isValid;
           }).sort((a, b) => {
             // Sort by creation date - most recent first
             const dateA = new Date(a.createdAt);
@@ -277,7 +430,7 @@ const ComplaintsList: React.FC = () => {
     fetchComplaints();
   }, []);
 
-  // Filter complaints based on user access and search criteria
+  // Filter complaints based on user access, search criteria, status, priority, and date
   const filteredComplaints = complaints.filter(complaint => {
     const matchesAccess = canAccessRegion(complaint.region);
     
@@ -285,9 +438,9 @@ const ComplaintsList: React.FC = () => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = searchTerm === '' || 
       // Basic complaint info
-      complaint.title.toLowerCase().includes(searchLower) ||
-      complaint.id.toLowerCase().includes(searchLower) ||
-      complaint.description.toLowerCase().includes(searchLower) ||
+      complaint.title?.toLowerCase().includes(searchLower) ||
+      complaint.id?.toLowerCase().includes(searchLower) ||
+      complaint.description?.toLowerCase().includes(searchLower) ||
       
       // Customer information
       complaint.customer?.name?.toLowerCase().includes(searchLower) ||
@@ -307,14 +460,16 @@ const ComplaintsList: React.FC = () => {
       
       // Repair order information
       complaint.repairOrder?.toLowerCase().includes(searchLower) ||
+      complaint.repairOrderNumber?.toLowerCase().includes(searchLower) ||
       
       // Region and location
       complaint.region?.toLowerCase().includes(searchLower);
       
     const matchesStatus = statusFilter === 'all' || complaint.status === statusFilter;
     const matchesPriority = priorityFilter === 'all' || complaint.priority === priorityFilter;
+    const matchesDate = matchesDateFilter(complaint);
 
-    return matchesAccess && matchesSearch && matchesStatus && matchesPriority;
+    return matchesAccess && matchesSearch && matchesStatus && matchesPriority && matchesDate;
   });
 
   const handleViewComplaint = (complaint: Complaint) => {
@@ -336,8 +491,45 @@ const ComplaintsList: React.FC = () => {
   const handleUpdateComplaint = async () => {
     if (!editingComplaint) return;
 
+    if (!editingComplaint.id) {
+      console.error('Missing complaint ID:', editingComplaint);
+      toast({
+        title: "Error",
+        description: "Missing complaint ID. Please refresh the page and try again.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Find the original complaint to check status transition
+    const originalComplaint = complaints.find(c => c.id === editingComplaint.id);
+    if (originalComplaint && originalComplaint.status !== editingComplaint.status) {
+      // Validate status transition
+      if (!isStatusTransitionAllowed(originalComplaint.status, editingComplaint.status as ComplaintStatus)) {
+        const allowedTransitions = getAllowedStatusTransitions(originalComplaint.status);
+        const allowedStatusNames = allowedTransitions.map(status => 
+          STATUS_CONFIG[status]?.label || status
+        ).join(', ');
+        
+        toast({
+          title: "Invalid Status Transition",
+          description: `Cannot change status from "${STATUS_CONFIG[originalComplaint.status]?.label || originalComplaint.status}" to "${STATUS_CONFIG[editingComplaint.status]?.label || editingComplaint.status}". Allowed transitions: ${allowedStatusNames || 'None (final state)'}`,
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+
     try {
-      const result = await apiService.updateComplaint(editingComplaint.id, editingComplaint);
+      const updateData = {
+        ...editingComplaint,
+        id: editingComplaint.id, // Ensure ID is included
+        updatedAt: new Date().toISOString(),
+        updatedBy: user?.id || user?.name || 'Unknown'
+      };
+
+      console.log('🔄 Updating complaint (edit) with data:', updateData);
+      const result = await apiService.updateComplaint(updateData);
 
       if (result.success) {
         // Refresh complaints list with sorting
@@ -461,10 +653,35 @@ const ComplaintsList: React.FC = () => {
   const handleStatusUpdateSubmit = async () => {
     if (!statusUpdateComplaint) return;
 
+    if (!statusUpdateComplaint.id) {
+      console.error('Missing complaint ID:', statusUpdateComplaint);
+      toast({
+        title: "Error",
+        description: "Missing complaint ID. Please refresh the page and try again.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (!statusUpdateForm.status) {
       toast({
         title: "Validation Error",
         description: "Please select a status.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate status transition workflow
+    if (!isStatusTransitionAllowed(statusUpdateComplaint.status, statusUpdateForm.status as ComplaintStatus)) {
+      const allowedTransitions = getAllowedStatusTransitions(statusUpdateComplaint.status);
+      const allowedStatusNames = allowedTransitions.map(status => 
+        STATUS_CONFIG[status]?.label || status
+      ).join(', ');
+      
+      toast({
+        title: "Invalid Status Transition",
+        description: `Cannot change status from "${STATUS_CONFIG[statusUpdateComplaint.status]?.label || statusUpdateComplaint.status}" to "${STATUS_CONFIG[statusUpdateForm.status]?.label || statusUpdateForm.status}". Allowed transitions: ${allowedStatusNames || 'None (final state)'}`,
         variant: "destructive"
       });
       return;
@@ -479,9 +696,11 @@ const ComplaintsList: React.FC = () => {
       return;
     }
 
+    setIsUpdatingStatus(true);
     try {
       const updateData = {
         ...statusUpdateComplaint,
+        id: statusUpdateComplaint.id, // Ensure ID is included
         status: statusUpdateForm.status,
         updatedAt: new Date().toISOString(),
         updatedBy: user?.id || user?.name || 'Unknown',
@@ -496,23 +715,36 @@ const ComplaintsList: React.FC = () => {
         updateData.resolvedAt = new Date().toISOString();
       }
 
-      const result = await apiService.updateComplaint(statusUpdateComplaint.id, updateData);
+      console.log('🔄 Updating complaint with data:', updateData);
+      console.log('🔄 Original complaint:', statusUpdateComplaint);
+      console.log('🔄 Form data:', statusUpdateForm);
+      
+      const result = await apiService.updateComplaint(updateData);
+      console.log('🔄 Update result:', result);
 
       if (result.success) {
-        // Refresh complaints list with sorting
-        const complaintsResult = await apiService.getComplaints();
-        if (complaintsResult.success && Array.isArray(complaintsResult.data)) {
-          const mapped = complaintsResult.data.map(mapComplaintData).filter(complaint => {
-            return complaint && complaint.id && complaint.priority && complaint.status;
-          }).sort((a, b) => {
-            // Sort by creation date - most recent first
-            const dateA = new Date(a.createdAt);
-            const dateB = new Date(b.createdAt);
-            return dateB.getTime() - dateA.getTime();
-          });
-          setComplaints(mapped);
-        }
+        console.log('✅ Status update successful, refreshing data...');
+        
+        // Update local state immediately for instant feedback
+        const immediateUpdate = complaints.map(complaint => {
+          if (complaint.id === statusUpdateComplaint.id) {
+            return {
+              ...complaint,
+              status: statusUpdateForm.status as ComplaintStatus,
+              updatedAt: new Date().toISOString(),
+              workType: statusUpdateForm.workType,
+              resolutionNotes: statusUpdateForm.resolutionNotes,
+              resolvedAt: statusUpdateForm.status === 'resolved' ? new Date().toISOString() : complaint.resolvedAt,
+              notes: complaint.notes ? 
+                [...complaint.notes, statusUpdateForm.notes].filter(note => note.trim()) :
+                [statusUpdateForm.notes].filter(note => note.trim())
+            };
+          }
+          return complaint;
+        });
+        setComplaints(immediateUpdate);
 
+        // Close dialog immediately to show user the action completed
         setStatusUpdateComplaint(null);
         setStatusUpdateForm({
           status: '',
@@ -521,10 +753,74 @@ const ComplaintsList: React.FC = () => {
           resolutionNotes: ''
         });
 
+        // Show success message
         toast({
           title: "Status Updated",
           description: `Complaint status has been updated to ${statusUpdateForm.status}.`,
         });
+
+        // Wait a moment for backend to process the update
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Refresh complaints list with sorting
+        const complaintsResult = await apiService.getComplaints();
+        console.log('🔄 Refreshed complaints result:', complaintsResult);
+        
+        if (complaintsResult.success && Array.isArray(complaintsResult.data)) {
+          // Find the updated complaint in the raw data
+          const updatedComplaintRaw = complaintsResult.data.find(item => 
+            (item.ID || item.id) === statusUpdateComplaint.id
+          );
+          console.log('🔍 Updated complaint raw data:', updatedComplaintRaw);
+          
+          const mapped = complaintsResult.data.map(mapComplaintData).filter(complaint => {
+            return complaint && complaint.id && complaint.priority && complaint.status;
+          }).sort((a, b) => {
+            // Sort by creation date - most recent first
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+            return dateB.getTime() - dateA.getTime();
+          });
+          
+          // Find the updated complaint in the mapped data
+          const updatedComplaintMapped = mapped.find(complaint => 
+            complaint.id === statusUpdateComplaint.id
+          );
+          console.log('🔍 Updated complaint mapped data:', updatedComplaintMapped);
+          console.log('🔍 Expected status:', statusUpdateForm.status);
+          console.log('🔍 Actual status in mapped data:', updatedComplaintMapped?.status);
+          
+          console.log('🔄 Setting updated complaints:', mapped.length, 'complaints');
+          
+          // Check if the status was actually updated in the backend data
+          if (updatedComplaintMapped && updatedComplaintMapped.status !== statusUpdateForm.status) {
+            console.log('⚠️ Backend data not updated yet, applying local update');
+            // Update the local state immediately for better UX
+            const locallyUpdated = mapped.map(complaint => {
+              if (complaint.id === statusUpdateComplaint.id) {
+                return {
+                  ...complaint,
+                  status: statusUpdateForm.status as ComplaintStatus,
+                  updatedAt: new Date().toISOString(),
+                  workType: statusUpdateForm.workType,
+                  resolutionNotes: statusUpdateForm.resolutionNotes,
+                  resolvedAt: statusUpdateForm.status === 'resolved' ? new Date().toISOString() : complaint.resolvedAt,
+                  notes: complaint.notes ? 
+                    [...complaint.notes, statusUpdateForm.notes].filter(note => note.trim()) :
+                    [statusUpdateForm.notes].filter(note => note.trim())
+                };
+              }
+              return complaint;
+            });
+            setComplaints(locallyUpdated);
+          } else {
+            setComplaints(mapped);
+          }
+          
+          // Force a re-render by updating the loading state briefly
+          setLoading(true);
+          setTimeout(() => setLoading(false), 100);
+        }
       } else {
         throw new Error(result.error || 'Failed to update complaint status');
       }
@@ -535,6 +831,8 @@ const ComplaintsList: React.FC = () => {
         description: error instanceof Error ? error.message : "Failed to update complaint status",
         variant: "destructive"
       });
+    } finally {
+      setIsUpdatingStatus(false);
     }
   };
 
@@ -560,6 +858,8 @@ const ComplaintsList: React.FC = () => {
       </div>
     );
   }
+
+
 
   return (
     <div className="space-y-6">
@@ -598,7 +898,7 @@ const ComplaintsList: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-primary/60" />
               <TooltipProvider>
@@ -657,6 +957,23 @@ const ComplaintsList: React.FC = () => {
               </SelectContent>
             </Select>
 
+            <Select value={dateFilter} onValueChange={setDateFilter}>
+              <SelectTrigger className="focus:ring-2 focus:ring-primary">
+                <SelectValue placeholder="Filter by date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Dates</SelectItem>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="yesterday">Yesterday</SelectItem>
+                <SelectItem value="last7days">Last 7 Days</SelectItem>
+                <SelectItem value="thisweek">This Week</SelectItem>
+                <SelectItem value="last30days">Last 30 Days</SelectItem>
+                <SelectItem value="thismonth">This Month</SelectItem>
+                <SelectItem value="lastmonth">Last Month</SelectItem>
+                <SelectItem value="custom">Custom Range</SelectItem>
+              </SelectContent>
+            </Select>
+
             <Button 
               variant="outline" 
               className="border-primary text-primary hover:bg-primary/10"
@@ -664,6 +981,9 @@ const ComplaintsList: React.FC = () => {
                 setSearchTerm('');
                 setStatusFilter('all');
                 setPriorityFilter('all');
+                setDateFilter('all');
+                setCustomDateFrom('');
+                setCustomDateTo('');
                 // Clear URL parameters as well
                 setSearchParams({}, { replace: true });
               }}
@@ -671,6 +991,172 @@ const ComplaintsList: React.FC = () => {
               Clear Filters
             </Button>
           </div>
+
+          {/* Quick Date Filter Buttons */}
+          <div className="mt-4">
+            <h4 className="text-sm font-medium mb-3 flex items-center space-x-2">
+              <Calendar className="h-4 w-4" />
+              <span>Quick Date Filters</span>
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { key: 'today', label: 'Today', icon: '📅' },
+                { key: 'yesterday', label: 'Yesterday', icon: '📆' },
+                { key: 'last7days', label: 'Last 7 Days', icon: '📊' },
+                { key: 'thisweek', label: 'This Week', icon: '🗓️' },
+                { key: 'last30days', label: 'Last 30 Days', icon: '📈' },
+                { key: 'thismonth', label: 'This Month', icon: '🗓️' },
+                { key: 'lastmonth', label: 'Last Month', icon: '📋' }
+              ].map((filter) => {
+                const count = getComplaintCountForDateFilter(filter.key);
+                return (
+                  <Button
+                    key={filter.key}
+                    variant={dateFilter === filter.key ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setDateFilter(filter.key)}
+                    className={`text-xs ${dateFilter === filter.key ? 'bg-primary text-primary-foreground' : 'hover:bg-primary/10'}`}
+                    title={`${count} complaint${count !== 1 ? 's' : ''} in this period`}
+                  >
+                    <span className="mr-1">{filter.icon}</span>
+                    {filter.label}
+                    <Badge 
+                      variant="secondary" 
+                      className={`ml-2 text-xs ${dateFilter === filter.key ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
+                    >
+                      {count}
+                    </Badge>
+                  </Button>
+                );
+              })}
+              <Button
+                variant={dateFilter === 'custom' ? "default" : "outline"}
+                size="sm"
+                onClick={() => setDateFilter('custom')}
+                className={`text-xs ${dateFilter === 'custom' ? 'bg-primary text-primary-foreground' : 'hover:bg-primary/10'}`}
+              >
+                <span className="mr-1">🎯</span>
+                Custom Range
+              </Button>
+              <Button
+                variant={dateFilter === 'all' ? "default" : "outline"}
+                size="sm"
+                onClick={() => setDateFilter('all')}
+                className={`text-xs ${dateFilter === 'all' ? 'bg-primary text-primary-foreground' : 'hover:bg-primary/10'}`}
+                title={`${complaints.length} total complaint${complaints.length !== 1 ? 's' : ''}`}
+              >
+                <span className="mr-1">🔄</span>
+                All Dates
+                <Badge 
+                  variant="secondary" 
+                  className={`ml-2 text-xs ${dateFilter === 'all' ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
+                >
+                  {complaints.length}
+                </Badge>
+              </Button>
+            </div>
+          </div>
+
+          {/* Custom Date Range Inputs */}
+          {dateFilter === 'custom' && (
+            <div className="mt-4 p-4 bg-muted/50 rounded-lg border">
+              <h4 className="text-sm font-medium mb-3 flex items-center space-x-2">
+                <Calendar className="h-4 w-4" />
+                <span>Custom Date Range</span>
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="date-from" className="text-xs text-muted-foreground">From Date</Label>
+                  <Input
+                    id="date-from"
+                    type="date"
+                    value={customDateFrom}
+                    onChange={(e) => setCustomDateFrom(e.target.value)}
+                    className="mt-1"
+                    max={customDateTo || new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="date-to" className="text-xs text-muted-foreground">To Date</Label>
+                  <Input
+                    id="date-to"
+                    type="date"
+                    value={customDateTo}
+                    onChange={(e) => setCustomDateTo(e.target.value)}
+                    className="mt-1"
+                    min={customDateFrom}
+                    max={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+              </div>
+              {customDateFrom && customDateTo && (
+                <div className="mt-3 p-2 bg-primary/10 rounded text-xs text-primary">
+                  📊 Showing complaints from {new Date(customDateFrom).toLocaleDateString()} to {new Date(customDateTo).toLocaleDateString()}
+                  {(() => {
+                    const from = new Date(customDateFrom);
+                    const to = new Date(customDateTo);
+                    const diffTime = Math.abs(to.getTime() - from.getTime());
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return ` (${diffDays} day${diffDays !== 1 ? 's' : ''})`;
+                  })()}
+                </div>
+              )}
+              {customDateFrom && customDateTo && new Date(customDateFrom) > new Date(customDateTo) && (
+                <div className="mt-2 p-2 bg-destructive/10 rounded text-xs text-destructive">
+                  ⚠️ Start date cannot be after end date
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Filter Summary */}
+          {(dateFilter !== 'all' || statusFilter !== 'all' || priorityFilter !== 'all' || searchTerm) && (
+            <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1 text-sm text-primary">
+                    <Filter className="h-4 w-4" />
+                    <span className="font-medium">Active Filters:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {dateFilter !== 'all' && (
+                      <Badge variant="outline" className="text-xs">
+                        📅 {dateFilter === 'custom' && customDateFrom && customDateTo
+                          ? `${new Date(customDateFrom).toLocaleDateString()} - ${new Date(customDateTo).toLocaleDateString()}`
+                          : dateFilter === 'today' ? 'Today'
+                          : dateFilter === 'yesterday' ? 'Yesterday'
+                          : dateFilter === 'last7days' ? 'Last 7 Days'
+                          : dateFilter === 'thisweek' ? 'This Week'
+                          : dateFilter === 'last30days' ? 'Last 30 Days'
+                          : dateFilter === 'thismonth' ? 'This Month'
+                          : dateFilter === 'lastmonth' ? 'Last Month'
+                          : dateFilter
+                        }
+                      </Badge>
+                    )}
+                    {statusFilter !== 'all' && (
+                      <Badge variant="outline" className="text-xs">
+                        🔄 Status: {statusFilter}
+                      </Badge>
+                    )}
+                    {priorityFilter !== 'all' && (
+                      <Badge variant="outline" className="text-xs">
+                        ⚡ Priority: {priorityFilter}
+                      </Badge>
+                    )}
+                    {searchTerm && (
+                      <Badge variant="outline" className="text-xs">
+                        🔍 Search: "{searchTerm}"
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <span className="font-medium text-primary">{filteredComplaints.length}</span> of {complaints.length} complaints
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -696,42 +1182,64 @@ const ComplaintsList: React.FC = () => {
                 </TooltipProvider>
               )}
             </CardTitle>
-            {searchTerm && (
-              <Badge variant="secondary" className="flex items-center space-x-1">
-                <Search className="h-3 w-3" />
-                <span>Searching: "{searchTerm}"</span>
-              </Badge>
-            )}
+            <div className="flex items-center space-x-2">
+              {searchTerm && (
+                <Badge variant="secondary" className="flex items-center space-x-1">
+                  <Search className="h-3 w-3" />
+                  <span>Searching: "{searchTerm}"</span>
+                </Badge>
+              )}
+              {dateFilter !== 'all' && (
+                <Badge variant="outline" className="flex items-center space-x-1">
+                  <Calendar className="h-3 w-3" />
+                  <span>
+                    {dateFilter === 'custom' && customDateFrom && customDateTo
+                      ? `${new Date(customDateFrom).toLocaleDateString()} - ${new Date(customDateTo).toLocaleDateString()}`
+                      : dateFilter === 'today' ? 'Today'
+                      : dateFilter === 'yesterday' ? 'Yesterday'
+                      : dateFilter === 'last7days' ? 'Last 7 Days'
+                      : dateFilter === 'thisweek' ? 'This Week'
+                      : dateFilter === 'last30days' ? 'Last 30 Days'
+                      : dateFilter === 'thismonth' ? 'This Month'
+                      : dateFilter === 'lastmonth' ? 'Last Month'
+                      : dateFilter
+                    }
+                  </span>
+                </Badge>
+              )}
+              {(statusFilter !== 'all' || priorityFilter !== 'all') && (
+                <Badge variant="outline" className="text-xs">
+                  {[
+                    statusFilter !== 'all' ? `Status: ${statusFilter}` : null,
+                    priorityFilter !== 'all' ? `Priority: ${priorityFilter}` : null
+                  ].filter(Boolean).join(', ')}
+                </Badge>
+              )}
+            </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="rounded-md border overflow-x-auto">
-            <Table className="min-w-[1200px]">
+        <CardContent className="p-4">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block rounded-md border overflow-hidden">
+            <Table className="w-full table-fixed" style={{ maxWidth: '100%' }}>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Mobile</TableHead>
-                  <TableHead>Address</TableHead>
-                  <TableHead>Region</TableHead>
-                  <TableHead>Service Center</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>
-                    <div className="flex items-center space-x-1">
-                      <Clock className="h-4 w-4" />
-                      <span>Created</span>
-                      <SortDesc className="h-3 w-3 text-primary" />
-                    </div>
+                  <TableHead className="w-[8%] p-2">ID</TableHead>
+                  <TableHead className="w-[25%] p-2">Complaint</TableHead>
+                  <TableHead className="w-[18%] p-2">Customer</TableHead>
+                  <TableHead className="w-[12%] p-2">Location</TableHead>
+                  <TableHead className="w-[8%] p-2">Priority</TableHead>
+                  <TableHead className="w-[10%] p-2">Status</TableHead>
+                  <TableHead className="w-[7%] p-2">
+                    <Clock className="h-3 w-3" />
                   </TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead className="w-[12%] p-2">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredComplaints.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={11} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       No complaints found matching your criteria
                     </TableCell>
                   </TableRow>
@@ -744,120 +1252,131 @@ const ComplaintsList: React.FC = () => {
                     }
                     return (
                     <TableRow key={complaint.id} className="hover:bg-muted/50 transition-colors">
-                      <TableCell className="font-medium">
-                        <div className="flex items-center space-x-2">
-                          <span>{complaint.id}</span>
+                      {/* ID Column - Ultra Compact */}
+                      <TableCell className="p-2">
+                        <div className="flex flex-col items-center">
+                          <span className="text-xs font-mono font-medium">{complaint.id}</span>
                           {isComplaintOverdue(complaint) && (
-                            <AlertTriangle 
-                              className="h-4 w-4 text-destructive" 
-                              title="Overdue - Created more than 7 days ago"
-                            />
+                            <AlertTriangle className="h-2 w-2 text-destructive mt-1" />
                           )}
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="max-w-[200px]">
-                          <p className="font-medium truncate">{complaint.title}</p>
-                          <p className="text-sm text-muted-foreground truncate">
-                            {t(`complaint_type.${complaint.category}`)}
+
+                      {/* Complaint Column - Compact */}
+                      <TableCell className="p-2">
+                        <div className="space-y-0.5">
+                          <p className="font-medium text-xs leading-tight truncate" title={complaint.title}>
+                            {complaint.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {t(`complaint_type.${complaint.category}`).substring(0, 20)}...
                           </p>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <User className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{complaint.customer.name}</span>
+
+                      {/* Customer Column - Very Compact */}
+                      <TableCell className="p-2">
+                        <div className="space-y-0.5">
+                          <p className="text-xs font-medium truncate" title={complaint.customer.name}>
+                            {complaint.customer.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {complaint.customer.phone?.substring(0, 10) || 'N/A'}
+                          </p>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <Phone className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{complaint.customer.phone || 'N/A'}</span>
+
+                      {/* Location Column - Minimal */}
+                      <TableCell className="p-2">
+                        <div className="space-y-0.5">
+                          <p className="text-xs text-primary font-medium truncate">
+                            {complaint.region}
+                          </p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {(complaint.customer.serviceCenter || complaint.serviceCenter || 'N/A').substring(0, 8)}
+                          </p>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <MapPin className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm max-w-[150px] truncate" title={complaint.customer.address}>
-                            {complaint.customer.address || 'N/A'}
+
+                      {/* Priority Column - Icon Only */}
+                      <TableCell className="p-1">
+                        <div 
+                          className={`w-6 h-6 rounded-full flex items-center justify-center ${PRIORITY_CONFIG[complaint.priority]?.bgColor || 'bg-muted'}`}
+                          title={PRIORITY_CONFIG[complaint.priority]?.labelKey ? t(PRIORITY_CONFIG[complaint.priority].labelKey) : complaint.priority}
+                        >
+                          <span className={`text-xs font-bold ${PRIORITY_CONFIG[complaint.priority]?.color || 'text-muted-foreground'}`}>
+                            {complaint.priority?.charAt(0).toUpperCase()}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <span className="text-sm text-primary">{complaint.region}</span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <Building className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{complaint.customer.serviceCenter || complaint.serviceCenter || 'N/A'}</span>
+
+                      {/* Status Column - Mini Badge */}
+                      <TableCell className="p-1">
+                        <div 
+                          className={`px-1.5 py-0.5 rounded text-xs font-medium ${STATUS_CONFIG[complaint.status]?.bgColor || 'bg-muted'} ${STATUS_CONFIG[complaint.status]?.color || 'text-muted-foreground'}`}
+                          title={STATUS_CONFIG[complaint.status]?.labelKey ? t(STATUS_CONFIG[complaint.status].labelKey) : complaint.status}
+                        >
+                          {complaint.status?.substring(0, 3).toUpperCase()}
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant="secondary"
-                          className={`${PRIORITY_CONFIG[complaint.priority]?.bgColor || 'bg-muted'} ${PRIORITY_CONFIG[complaint.priority]?.color || 'text-muted-foreground'}`}
-                        >
-                          {PRIORITY_CONFIG[complaint.priority]?.labelKey ? t(PRIORITY_CONFIG[complaint.priority].labelKey) : complaint.priority || 'Unknown'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant="secondary"
-                          className={`${STATUS_CONFIG[complaint.status]?.bgColor || 'bg-muted'} ${STATUS_CONFIG[complaint.status]?.color || 'text-muted-foreground'}`}
-                        >
-                          {STATUS_CONFIG[complaint.status]?.labelKey ? t(STATUS_CONFIG[complaint.status].labelKey) : complaint.status || 'Unknown'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          <span>{format(new Date(complaint.createdAt), 'MMM dd')}</span>
+
+                      {/* Date Column - Minimal */}
+                      <TableCell className="p-2">
+                        <div className="text-xs text-muted-foreground text-center">
+                          <div>{format(new Date(complaint.createdAt), 'MMM')}</div>
+                          <div className="font-medium">{format(new Date(complaint.createdAt), 'dd')}</div>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleViewComplaint(complaint)}
-                            className="h-8 w-8 p-0"
-                            title="View Details"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <ProtectedAction resource="complaints" action="update">
+
+                      {/* Actions Column - Compact Icons */}
+                      <TableCell className="p-1">
+                        <div className="flex flex-col space-y-1">
+                          <div className="flex space-x-0.5">
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleStatusUpdate(complaint)}
-                              className="h-8 w-8 p-0 text-green-600 hover:text-green-700"
-                              title="Update Status"
+                              onClick={() => handleViewComplaint(complaint)}
+                              className="h-6 w-6 p-0"
+                              title="View"
                             >
-                              <Settings className="h-4 w-4" />
+                              <Eye className="h-3 w-3" />
                             </Button>
-                          </ProtectedAction>
-                          <ProtectedAction resource="complaints" action="update">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditComplaint(complaint)}
-                              className="h-8 w-8 p-0"
-                              title="Edit Complaint"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </ProtectedAction>
-                          <ProtectedAction resource="complaints" action="delete">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteComplaint(complaint.id)}
-                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                              title="Delete Complaint"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </ProtectedAction>
+                            <ProtectedAction resource="complaints" action="update">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleStatusUpdate(complaint)}
+                                className="h-6 w-6 p-0 text-green-600"
+                                title="Status"
+                              >
+                                <Settings className="h-3 w-3" />
+                              </Button>
+                            </ProtectedAction>
+                          </div>
+                          <div className="flex space-x-0.5">
+                            <ProtectedAction resource="complaints" action="update">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEditComplaint(complaint)}
+                                className="h-6 w-6 p-0"
+                                title="Edit"
+                              >
+                                <Edit className="h-3 w-3" />
+                              </Button>
+                            </ProtectedAction>
+                            <ProtectedAction resource="complaints" action="delete">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteComplaint(complaint.id)}
+                                className="h-6 w-6 p-0 text-destructive"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </ProtectedAction>
+                          </div>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -866,6 +1385,185 @@ const ComplaintsList: React.FC = () => {
                 )}
               </TableBody>
             </Table>
+          </div>
+
+          {/* Tablet Compact Table View */}
+          <div className="hidden md:block lg:hidden rounded-md border">
+            <Table className="w-full table-fixed">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[60px] p-1 text-xs">ID</TableHead>
+                  <TableHead className="w-[180px] p-1 text-xs">Details</TableHead>
+                  <TableHead className="w-[120px] p-1 text-xs">Customer</TableHead>
+                  <TableHead className="w-[80px] p-1 text-xs">Region</TableHead>
+                  <TableHead className="w-[50px] p-1 text-xs">P</TableHead>
+                  <TableHead className="w-[60px] p-1 text-xs">Status</TableHead>
+                  <TableHead className="w-[80px] p-1 text-xs">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredComplaints.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      No complaints found matching your criteria
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredComplaints.map((complaint) => {
+                    if (!complaint || !complaint.priority || !complaint.status) {
+                      return null;
+                    }
+                    return (
+                      <TableRow key={complaint.id} className="hover:bg-muted/50">
+                        <TableCell className="p-1 text-xs font-mono">{complaint.id}</TableCell>
+                        <TableCell className="p-1">
+                          <div className="truncate text-xs font-medium" title={complaint.title}>
+                            {complaint.title}
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <div className="truncate text-xs" title={complaint.customer.name}>
+                            {complaint.customer.name}
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-1 text-xs">{complaint.region}</TableCell>
+                        <TableCell className="p-1">
+                          <div className={`w-4 h-4 rounded-full ${PRIORITY_CONFIG[complaint.priority]?.bgColor}`} title={complaint.priority}></div>
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <div className={`px-1 py-0.5 rounded text-xs ${STATUS_CONFIG[complaint.status]?.bgColor}`}>
+                            {complaint.status?.substring(0, 3)}
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <div className="flex space-x-0.5">
+                            <Button variant="ghost" size="sm" onClick={() => handleViewComplaint(complaint)} className="h-5 w-5 p-0">
+                              <Eye className="h-3 w-3" />
+                            </Button>
+                            <ProtectedAction resource="complaints" action="update">
+                              <Button variant="ghost" size="sm" onClick={() => handleStatusUpdate(complaint)} className="h-5 w-5 p-0">
+                                <Settings className="h-3 w-3" />
+                              </Button>
+                            </ProtectedAction>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-4">
+            {filteredComplaints.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No complaints found matching your criteria
+              </div>
+            ) : (
+              filteredComplaints.map((complaint) => {
+                if (!complaint || !complaint.priority || !complaint.status) {
+                  return null;
+                }
+                return (
+                  <Card key={complaint.id} className="p-4">
+                    <div className="space-y-3">
+                      {/* Header */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-xs font-mono font-medium">{complaint.id}</span>
+                          {isComplaintOverdue(complaint) && (
+                            <AlertTriangle className="h-3 w-3 text-destructive" />
+                          )}
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Badge 
+                            variant="secondary"
+                            className={`text-xs ${PRIORITY_CONFIG[complaint.priority]?.bgColor || 'bg-muted'} ${PRIORITY_CONFIG[complaint.priority]?.color || 'text-muted-foreground'}`}
+                          >
+                            {PRIORITY_CONFIG[complaint.priority]?.labelKey ? t(PRIORITY_CONFIG[complaint.priority].labelKey) : complaint.priority}
+                          </Badge>
+                          <Badge 
+                            variant="secondary"
+                            className={`text-xs ${STATUS_CONFIG[complaint.status]?.bgColor || 'bg-muted'} ${STATUS_CONFIG[complaint.status]?.color || 'text-muted-foreground'}`}
+                          >
+                            {STATUS_CONFIG[complaint.status]?.labelKey ? t(STATUS_CONFIG[complaint.status].labelKey) : complaint.status}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      {/* Title */}
+                      <div>
+                        <h4 className="font-medium text-sm">{complaint.title}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {t(`complaint_type.${complaint.category}`)}
+                        </p>
+                      </div>
+
+                      {/* Customer & Location */}
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-1">
+                            <User className="h-3 w-3 text-muted-foreground" />
+                            <span className="truncate">{complaint.customer.name}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Phone className="h-3 w-3 text-muted-foreground" />
+                            <span>{complaint.customer.phone || 'N/A'}</span>
+                          </div>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-1">
+                            <MapPin className="h-3 w-3 text-muted-foreground" />
+                            <span className="text-primary font-medium">{complaint.region}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Calendar className="h-3 w-3 text-muted-foreground" />
+                            <span>{format(new Date(complaint.createdAt), 'MMM dd, yyyy')}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center justify-end space-x-2 pt-2 border-t">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleViewComplaint(complaint)}
+                          className="h-8 px-3 text-xs"
+                        >
+                          <Eye className="h-3 w-3 mr-1" />
+                          View
+                        </Button>
+                        <ProtectedAction resource="complaints" action="update">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleStatusUpdate(complaint)}
+                            className="h-8 px-3 text-xs text-green-600 hover:text-green-700"
+                          >
+                            <Settings className="h-3 w-3 mr-1" />
+                            Status
+                          </Button>
+                        </ProtectedAction>
+                        <ProtectedAction resource="complaints" action="update">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditComplaint(complaint)}
+                            className="h-8 px-3 text-xs"
+                          >
+                            <Edit className="h-3 w-3 mr-1" />
+                            Edit
+                          </Button>
+                        </ProtectedAction>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })
+            )}
           </div>
         </CardContent>
       </Card>
@@ -1097,10 +1795,16 @@ const ComplaintsList: React.FC = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="open">Open</SelectItem>
-                      <SelectItem value="in-progress">In Progress</SelectItem>
-                      <SelectItem value="resolved">Resolved</SelectItem>
-                      <SelectItem value="closed">Closed</SelectItem>
+                      {/* Keep current status as an option */}
+                      <SelectItem value={editingComplaint.status}>
+                        {STATUS_CONFIG[editingComplaint.status]?.label || editingComplaint.status} (Current)
+                      </SelectItem>
+                      {/* Show allowed transitions */}
+                      {getAllowedStatusTransitions(editingComplaint.status).map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {STATUS_CONFIG[status]?.label || status}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -1127,6 +1831,9 @@ const ComplaintsList: React.FC = () => {
                 <Settings className="h-5 w-5" />
                 <span>Update Status - {statusUpdateComplaint.id}</span>
               </DialogTitle>
+              <DialogDescription>
+                Update the status of this complaint and add any relevant notes or work details.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-6">
               {/* Current Status Info */}
@@ -1158,6 +1865,17 @@ const ComplaintsList: React.FC = () => {
 
               {/* Status Update Form */}
               <div className="space-y-4">
+                {/* Workflow Information */}
+                <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                  <h5 className="text-sm font-medium text-blue-800 mb-1">Status Workflow</h5>
+                  <p className="text-xs text-blue-600">
+                    {getAllowedStatusTransitions(statusUpdateComplaint.status).length > 0 
+                      ? `From "${STATUS_CONFIG[statusUpdateComplaint.status]?.label || statusUpdateComplaint.status}", you can change to: ${getAllowedStatusTransitions(statusUpdateComplaint.status).map(s => STATUS_CONFIG[s]?.label || s).join(', ')}`
+                      : `"${STATUS_CONFIG[statusUpdateComplaint.status]?.label || statusUpdateComplaint.status}" is a final state - no further status changes allowed.`
+                    }
+                  </p>
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="status-update">New Status *</Label>
@@ -1169,11 +1887,16 @@ const ComplaintsList: React.FC = () => {
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="open">Open</SelectItem>
-                        <SelectItem value="in-progress">In Progress</SelectItem>
-                        <SelectItem value="resolved">Resolved</SelectItem>
-                        <SelectItem value="escalated">Escalated</SelectItem>
-                        <SelectItem value="closed">Closed</SelectItem>
+                        {getAllowedStatusTransitions(statusUpdateComplaint.status).map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {STATUS_CONFIG[status]?.label || status}
+                          </SelectItem>
+                        ))}
+                        {getAllowedStatusTransitions(statusUpdateComplaint.status).length === 0 && (
+                          <SelectItem value="" disabled>
+                            No status changes allowed (final state)
+                          </SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
@@ -1230,15 +1953,31 @@ const ComplaintsList: React.FC = () => {
                 <Button 
                   variant="outline" 
                   onClick={() => setStatusUpdateComplaint(null)}
+                  disabled={isUpdatingStatus}
                 >
                   Cancel
                 </Button>
                 <Button 
                   onClick={handleStatusUpdateSubmit}
                   className="bg-green-600 hover:bg-green-700"
+                  disabled={isUpdatingStatus || getAllowedStatusTransitions(statusUpdateComplaint.status).length === 0}
                 >
-                  <CheckCircle className="mr-2 h-4 w-4" />
-                  Update Status
+                  {isUpdatingStatus ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2" />
+                      Updating...
+                    </>
+                  ) : getAllowedStatusTransitions(statusUpdateComplaint.status).length === 0 ? (
+                    <>
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                      No Updates Allowed
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                      Update Status
+                    </>
+                  )}
                 </Button>
               </div>
             </div>

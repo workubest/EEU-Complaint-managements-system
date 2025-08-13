@@ -24,20 +24,11 @@ import {
   AlertTriangle,
   Save,
   RefreshCw,
-  Users,
-  FileText,
-  BarChart3,
-  MessageSquare,
-  UserCog,
-  Lock,
-  Check,
-  X
+
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { ProtectedAction } from '@/components/auth/ProtectedRoute';
+
 import { apiService } from '@/lib/api';
 
 interface SystemSettings {
@@ -58,23 +49,7 @@ interface SystemSettings {
   };
 }
 
-interface PermissionMatrix {
-  [role: string]: {
-    [resource: string]: {
-      create: boolean;
-      read: boolean;
-      update: boolean;
-      delete: boolean;
-    };
-  };
-}
 
-interface ResourceConfig {
-  key: string;
-  name: string;
-  description: string;
-  icon: React.ComponentType<any>;
-}
 
 export function Settings() {
   const { permissions, role } = useAuth();
@@ -100,59 +75,7 @@ export function Settings() {
 
   const [isDirty, setIsDirty] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [permissionMatrix, setPermissionMatrix] = useState<PermissionMatrix>({});
-  const [permissionsDirty, setPermissionsDirty] = useState(false);
 
-  // Define available resources
-  const resources: ResourceConfig[] = [
-    {
-      key: 'users',
-      name: 'User Management',
-      description: 'Manage system users and their profiles',
-      icon: Users
-    },
-    {
-      key: 'complaints',
-      name: 'Complaints',
-      description: 'Handle customer complaints and tickets',
-      icon: MessageSquare
-    },
-    {
-      key: 'reports',
-      name: 'Reports & Analytics',
-      description: 'Generate and view system reports',
-      icon: BarChart3
-    },
-    {
-      key: 'settings',
-      name: 'System Settings',
-      description: 'Configure system preferences',
-      icon: SettingsIcon
-    },
-    {
-      key: 'notifications',
-      name: 'Notifications',
-      description: 'Manage system notifications',
-      icon: Bell
-    }
-  ];
-
-  // Define available roles
-  const roles = [
-    { key: 'admin', name: 'Administrator', color: 'bg-destructive/10 text-destructive' },
-    { key: 'manager', name: 'Manager', color: 'bg-warning/10 text-warning' },
-    { key: 'foreman', name: 'Foreman', color: 'bg-primary/10 text-primary' },
-    { key: 'call-attendant', name: 'Call Attendant', color: 'bg-success/10 text-success' },
-    { key: 'technician', name: 'Technician', color: 'bg-muted text-muted-foreground' }
-  ];
-
-  // CRUD operations
-  const operations = [
-    { key: 'create', name: 'Create', color: 'text-success' },
-    { key: 'read', name: 'Read', color: 'text-primary' },
-    { key: 'update', name: 'Update', color: 'text-warning' },
-    { key: 'delete', name: 'Delete', color: 'text-destructive' }
-  ];
 
   // Load settings and permissions on component mount
   React.useEffect(() => {
@@ -168,14 +91,7 @@ export function Settings() {
           }));
         }
 
-        // Fetch permission matrix
-        const permissionsResult = await apiService.getPermissionMatrix();
-        if (permissionsResult.success && permissionsResult.data) {
-          setPermissionMatrix(permissionsResult.data);
-        } else {
-          // Initialize with default permissions if none exist
-          initializeDefaultPermissions();
-        }
+
       } catch (error) {
         console.error('Error fetching data:', error);
         toast({
@@ -183,8 +99,7 @@ export function Settings() {
           description: "Failed to load settings and permissions",
           variant: "destructive"
         });
-        // Initialize with defaults on error
-        initializeDefaultPermissions();
+
       } finally {
         setLoading(false);
       }
@@ -193,58 +108,7 @@ export function Settings() {
     fetchData();
   }, []);
 
-  // Initialize default permission matrix
-  const initializeDefaultPermissions = () => {
-    const defaultMatrix: PermissionMatrix = {};
-    
-    roles.forEach(role => {
-      defaultMatrix[role.key] = {};
-      resources.forEach(resource => {
-        // Set default permissions based on role hierarchy
-        switch (role.key) {
-          case 'admin':
-            defaultMatrix[role.key][resource.key] = { create: true, read: true, update: true, delete: true };
-            break;
-          case 'manager':
-            defaultMatrix[role.key][resource.key] = { 
-              create: resource.key !== 'settings', 
-              read: true, 
-              update: resource.key !== 'settings', 
-              delete: resource.key === 'complaints' || resource.key === 'notifications' 
-            };
-            break;
-          case 'foreman':
-            defaultMatrix[role.key][resource.key] = { 
-              create: resource.key === 'complaints', 
-              read: resource.key !== 'settings', 
-              update: resource.key === 'complaints', 
-              delete: false 
-            };
-            break;
-          case 'call-attendant':
-            defaultMatrix[role.key][resource.key] = { 
-              create: resource.key === 'complaints', 
-              read: resource.key === 'complaints' || resource.key === 'notifications', 
-              update: resource.key === 'complaints', 
-              delete: false 
-            };
-            break;
-          case 'technician':
-            defaultMatrix[role.key][resource.key] = { 
-              create: false, 
-              read: resource.key === 'complaints', 
-              update: resource.key === 'complaints', 
-              delete: false 
-            };
-            break;
-          default:
-            defaultMatrix[role.key][resource.key] = { create: false, read: false, update: false, delete: false };
-        }
-      });
-    });
 
-    setPermissionMatrix(defaultMatrix);
-  };
 
   const handleSettingChange = (key: keyof SystemSettings, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -259,81 +123,7 @@ export function Settings() {
     setIsDirty(true);
   };
 
-  // Permission management functions
-  const handlePermissionChange = (roleKey: string, resourceKey: string, operation: string, value: boolean) => {
-    setPermissionMatrix(prev => ({
-      ...prev,
-      [roleKey]: {
-        ...prev[roleKey],
-        [resourceKey]: {
-          ...prev[roleKey]?.[resourceKey],
-          [operation]: value
-        }
-      }
-    }));
-    setPermissionsDirty(true);
-  };
 
-  const handleBulkPermissionChange = (roleKey: string, resourceKey: string, permissions: { create: boolean; read: boolean; update: boolean; delete: boolean }) => {
-    setPermissionMatrix(prev => ({
-      ...prev,
-      [roleKey]: {
-        ...prev[roleKey],
-        [resourceKey]: permissions
-      }
-    }));
-    setPermissionsDirty(true);
-  };
-
-  const handleSavePermissions = async () => {
-    if (role !== 'admin') {
-      toast({
-        title: "Access Denied",
-        description: "Only administrators can modify permissions.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const result = await apiService.updatePermissionMatrix(permissionMatrix);
-      
-      if (result.success) {
-        toast({
-          title: "Permissions Saved",
-          description: "Permission matrix has been updated successfully.",
-        });
-        setPermissionsDirty(false);
-      } else {
-        throw new Error(result.error || 'Failed to save permissions');
-      }
-    } catch (error) {
-      console.error('Error saving permissions:', error);
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to save permissions",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleResetPermissions = () => {
-    if (role !== 'admin') {
-      toast({
-        title: "Access Denied",
-        description: "Only administrators can reset permissions.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    initializeDefaultPermissions();
-    setPermissionsDirty(true);
-    toast({
-      title: "Permissions Reset",
-      description: "Permission matrix has been reset to default values.",
-    });
-  };
 
   const validateSettings = (): boolean => {
     if (!settings.companyName?.trim()) {
@@ -623,27 +413,17 @@ export function Settings() {
               <Save className="mr-2 h-4 w-4" />
               Save Settings
             </Button>
-            {role === 'admin' && permissionsDirty && (
-              <Button 
-                onClick={handleSavePermissions} 
-                variant="secondary"
-                className="bg-warning/10 text-warning hover:bg-warning/20"
-              >
-                <UserCog className="mr-2 h-4 w-4" />
-                Save Permissions
-              </Button>
-            )}
+
           </div>
         )}
       </div>
 
       <Tabs defaultValue="general" className="animate-slide-up">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="workflow">Workflow</TabsTrigger>
-          <TabsTrigger value="permissions">Permissions</TabsTrigger>
           <TabsTrigger value="system">System</TabsTrigger>
           <TabsTrigger value="about">About</TabsTrigger>
         </TabsList>
@@ -919,160 +699,7 @@ export function Settings() {
           </Card>
         </TabsContent>
 
-        {/* Permissions Management */}
-        <TabsContent value="permissions" className="space-y-6">
-          {role === 'admin' ? (
-            <>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-medium">Permission Management</h3>
-                  <p className="text-sm text-muted-foreground">Configure CRUD permissions for each role and resource</p>
-                </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" onClick={handleResetPermissions}>
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Reset to Defaults
-                  </Button>
-                  <Button 
-                    onClick={handleSavePermissions} 
-                    disabled={!permissionsDirty}
-                    className="bg-gradient-primary"
-                  >
-                    <Save className="mr-2 h-4 w-4" />
-                    Save Permissions
-                  </Button>
-                </div>
-              </div>
 
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <UserCog className="h-5 w-5" />
-                    <span>Role-Based Access Control Matrix</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    {resources.map(resource => {
-                      const IconComponent = resource.icon;
-                      return (
-                        <div key={resource.key} className="border border-border rounded-lg p-4">
-                          <div className="flex items-center space-x-3 mb-4">
-                            <IconComponent className="h-5 w-5 text-primary" />
-                            <div>
-                              <h4 className="font-medium">{resource.name}</h4>
-                              <p className="text-sm text-muted-foreground">{resource.description}</p>
-                            </div>
-                          </div>
-                          
-                          <div className="overflow-x-auto">
-                            <table className="w-full">
-                              <thead>
-                                <tr className="border-b">
-                                  <th className="text-left py-2 px-3 font-medium">Role</th>
-                                  {operations.map(op => (
-                                    <th key={op.key} className={`text-center py-2 px-3 font-medium ${op.color}`}>
-                                      {op.name}
-                                    </th>
-                                  ))}
-                                  <th className="text-center py-2 px-3 font-medium">Quick Actions</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {roles.map(role => (
-                                  <tr key={role.key} className="border-b">
-                                    <td className="py-3 px-3">
-                                      <Badge className={role.color}>{role.name}</Badge>
-                                    </td>
-                                    {operations.map(op => (
-                                      <td key={op.key} className="text-center py-3 px-3">
-                                        <Switch
-                                          checked={permissionMatrix[role.key]?.[resource.key]?.[op.key] || false}
-                                          onCheckedChange={(checked) => 
-                                            handlePermissionChange(role.key, resource.key, op.key, checked)
-                                          }
-                                          size="sm"
-                                        />
-                                      </td>
-                                    ))}
-                                    <td className="text-center py-3 px-3">
-                                      <div className="flex justify-center space-x-1">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() => handleBulkPermissionChange(role.key, resource.key, 
-                                            { create: true, read: true, update: true, delete: true })}
-                                          className="h-7 px-2"
-                                        >
-                                          <Check className="h-3 w-3" />
-                                        </Button>
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() => handleBulkPermissionChange(role.key, resource.key, 
-                                            { create: false, read: false, update: false, delete: false })}
-                                          className="h-7 px-2"
-                                        >
-                                          <X className="h-3 w-3" />
-                                        </Button>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Shield className="h-5 w-5" />
-                    <span>Permission Summary</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {roles.map(role => {
-                      const rolePermissions = permissionMatrix[role.key] || {};
-                      const totalPermissions = resources.length * operations.length;
-                      const grantedPermissions = Object.values(rolePermissions).reduce((acc, resourcePerms) => {
-                        return acc + Object.values(resourcePerms || {}).filter(Boolean).length;
-                      }, 0);
-                      const permissionPercentage = totalPermissions > 0 ? (grantedPermissions / totalPermissions) * 100 : 0;
-
-                      return (
-                        <div key={role.key} className="p-4 border border-border rounded-lg">
-                          <div className="flex items-center justify-between mb-2">
-                            <Badge className={role.color}>{role.name}</Badge>
-                            <span className="text-sm font-medium">{Math.round(permissionPercentage)}%</span>
-                          </div>
-                          <Progress value={permissionPercentage} className="h-2" />
-                          <p className="text-xs text-muted-foreground mt-2">
-                            {grantedPermissions} of {totalPermissions} permissions granted
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            </>
-          ) : (
-            <div className="flex items-center justify-center h-96">
-              <div className="text-center">
-                <Lock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-foreground mb-2">Access Restricted</h3>
-                <p className="text-muted-foreground">Only administrators can manage system permissions</p>
-              </div>
-            </div>
-          )}
-        </TabsContent>
 
         {/* System Settings */}
         <TabsContent value="system" className="space-y-6">

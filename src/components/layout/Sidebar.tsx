@@ -5,7 +5,6 @@ import {
   Users, 
   Settings, 
   Home,
-  Search,
   Bell,
   Download,
   Shield
@@ -20,7 +19,6 @@ const getNavigation = (t: (key: string) => string) => [
   { name: t('nav.dashboard'), href: '/dashboard', icon: Home, requiresAuth: false },
   { name: t('nav.new_complaint'), href: '/dashboard/complaints/new', icon: Plus, requiresAuth: false },
   { name: t('nav.complaint_list'), href: '/dashboard/complaints', icon: FileText, requiresAuth: false },
-  { name: t('nav.search_complaints'), href: '/dashboard/complaints/search', icon: Search, requiresAuth: false },
   { name: t('nav.analytics'), href: '/dashboard/analytics', icon: BarChart3, resource: 'reports', action: 'read' },
   { name: t('nav.reports'), href: '/dashboard/reports', icon: Download, resource: 'reports', action: 'read' },
   { name: t('nav.users'), href: '/dashboard/users', icon: Users, resource: 'users', action: 'read' },

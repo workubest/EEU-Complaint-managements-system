@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { DashboardProvider } from "@/contexts/DashboardContext";
 import { Layout } from "@/components/layout/Layout";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Suspense, lazy, memo } from "react";
@@ -16,7 +17,7 @@ const Login = lazy(() => import("@/pages/Login").then(module => ({ default: modu
 const Dashboard = lazy(() => import("@/pages/Dashboard").then(module => ({ default: module.Dashboard })));
 const ComplaintForm = lazy(() => import("@/pages/ComplaintForm").then(module => ({ default: module.ComplaintForm })));
 const ComplaintsList = lazy(() => import("@/pages/ComplaintsList").then(module => ({ default: module.ComplaintsList })));
-const ComplaintsSearch = lazy(() => import("@/pages/ComplaintsSearch").then(module => ({ default: module.ComplaintsSearch })));
+
 const ComplaintDetail = lazy(() => import("@/pages/ComplaintDetail"));
 const Analytics = lazy(() => import("@/pages/Analytics").then(module => ({ default: module.Analytics })));
 const Reports = lazy(() => import("@/pages/Reports").then(module => ({ default: module.Reports })));
@@ -98,14 +99,7 @@ const AppRoutes = memo(() => {
                       </ProtectedRoute>
                     } 
                   />
-                  <Route 
-                    path="/complaints/search" 
-                    element={
-                      <ProtectedRoute resource="complaints" action="read">
-                        <ComplaintsSearch />
-                      </ProtectedRoute>
-                    } 
-                  />
+
                   <Route 
                     path="/analytics" 
                     element={
@@ -191,9 +185,11 @@ const App = memo(() => (
         <Sonner />
         <LanguageProvider>
           <AuthProvider>
-            <BrowserRouter>
-              <AppRoutes />
-            </BrowserRouter>
+            <DashboardProvider>
+              <BrowserRouter>
+                <AppRoutes />
+              </BrowserRouter>
+            </DashboardProvider>
           </AuthProvider>
         </LanguageProvider>
       </TooltipProvider>

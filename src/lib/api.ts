@@ -41,17 +41,25 @@ class ApiService {
   constructor() {
     this.isProduction = environment.isProduction;
     this.baseUrl = environment.apiBaseUrl;
+    this.demoMode = environment.forceDemoMode;
     
     console.log('🚀 API Service initialized');
     console.log('📡 Backend URL:', this.baseUrl);
     console.log('🔧 Production mode:', this.isProduction);
-    console.log('🎭 Demo mode available as fallback');
+    console.log('🎭 Demo mode:', this.demoMode);
+    console.log('🎭 Force demo mode:', environment.forceDemoMode);
   }
 
   private async makeRequest<T>(
     endpoint: string, 
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
+    // Check if demo mode is forced
+    if (this.demoMode) {
+      console.log('🎭 Demo mode is active - returning demo response');
+      return this.getDemoResponse<T>(endpoint, options);
+    }
+    
     try {
       let url: string;
       let fetchOptions: RequestInit;
@@ -202,9 +210,62 @@ class ApiService {
         } as ApiResponse<T>;
         
       case 'getComplaints':
+        // Apply filters to mock data for more realistic demo
+        let filteredComplaints = [...mockComplaints];
+        
+        // Apply date filters if present
+        if (requestData.dateFilter) {
+          const now = new Date();
+          const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          
+          switch (requestData.dateFilter) {
+            case 'today':
+              filteredComplaints = filteredComplaints.filter(c => {
+                const createdDate = new Date(c.createdAt);
+                return createdDate >= today;
+              });
+              break;
+            case 'yesterday':
+              const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+              filteredComplaints = filteredComplaints.filter(c => {
+                const createdDate = new Date(c.createdAt);
+                return createdDate >= yesterday && createdDate < today;
+              });
+              break;
+            case 'thisweek':
+              const weekStart = new Date(today.getTime() - (today.getDay() * 24 * 60 * 60 * 1000));
+              filteredComplaints = filteredComplaints.filter(c => {
+                const createdDate = new Date(c.createdAt);
+                return createdDate >= weekStart;
+              });
+              break;
+            case 'thismonth':
+              const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+              filteredComplaints = filteredComplaints.filter(c => {
+                const createdDate = new Date(c.createdAt);
+                return createdDate >= monthStart;
+              });
+              break;
+          }
+        }
+        
+        // Apply status filters
+        if (requestData.status) {
+          filteredComplaints = filteredComplaints.filter(c => 
+            c.status.toLowerCase() === requestData.status.toLowerCase()
+          );
+        }
+        
+        // Apply priority filters
+        if (requestData.priority) {
+          filteredComplaints = filteredComplaints.filter(c => 
+            c.priority.toLowerCase() === requestData.priority.toLowerCase()
+          );
+        }
+        
         return {
           success: true,
-          data: mockComplaints
+          data: filteredComplaints
         } as ApiResponse<T>;
         
       case 'getUsers':
@@ -487,13 +548,20 @@ class ApiService {
   }
 
   async updateComplaint(complaintData: any): Promise<ApiResponse> {
-    return this.makeRequest('?action=updateComplaint', {
+    const requestData = {
+      action: 'updateComplaint',
+      ...complaintData
+    };
+    
+    console.log('📡 API updateComplaint - Sending data:', requestData);
+    
+    const response = await this.makeRequest('?action=updateComplaint', {
       method: 'POST',
-      body: JSON.stringify({
-        action: 'updateComplaint',
-        ...complaintData
-      })
+      body: JSON.stringify(requestData)
     });
+    
+    console.log('📡 API updateComplaint - Response:', response);
+    return response;
   }
 
   async getDashboardStats(): Promise<ApiResponse> {
@@ -701,10 +769,23 @@ class ApiService {
   }
 
   async getNotifications(): Promise<ApiResponse> {
-    // Backend doesn't have getNotifications, use activity feed as fallback
+    // Try to get real notifications from backend
+    try {
+      const response = await this.makeRequest('?action=getNotifications');
+      if (response.success && response.data) {
+        return {
+          success: true,
+          data: response.data
+        };
+      }
+    } catch (error) {
+      console.warn('Backend getNotifications not available, trying activity feed');
+    }
+
+    // Fallback: Try to use activity feed as notifications
     try {
       const response = await this.makeRequest('?action=getActivityFeed');
-      if (response.success && response.data) {
+      if (response.success && response.data && Array.isArray(response.data) && response.data.length > 0) {
         // Transform activity feed into notifications format
         const notifications = response.data.map((activity: any, index: number) => ({
           id: `notif-${index + 1}`,
@@ -724,68 +805,13 @@ class ApiService {
         };
       }
     } catch (error) {
-      console.warn('Failed to fetch activity feed for notifications, using empty array');
+      console.warn('Failed to fetch activity feed for notifications');
     }
     
-    // Return sample notifications if activity feed fails
-    const sampleNotifications = [
-      {
-        id: 'notif-1',
-        title: 'New Complaint Received',
-        message: 'A new power outage complaint has been submitted from Addis Ababa region.',
-        type: 'info',
-        priority: 'high',
-        isRead: false,
-        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-        relatedComplaintId: 'COMP-2024-001',
-        actionRequired: true
-      },
-      {
-        id: 'notif-2',
-        title: 'System Maintenance Scheduled',
-        message: 'Scheduled maintenance will occur tonight from 2:00 AM to 4:00 AM.',
-        type: 'warning',
-        priority: 'medium',
-        isRead: false,
-        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // 4 hours ago
-        actionRequired: false
-      },
-      {
-        id: 'notif-3',
-        title: 'Complaint Resolved',
-        message: 'Power outage complaint COMP-2024-002 has been successfully resolved.',
-        type: 'success',
-        priority: 'low',
-        isRead: true,
-        createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
-        relatedComplaintId: 'COMP-2024-002',
-        actionRequired: false
-      },
-      {
-        id: 'notif-4',
-        title: 'Critical System Alert',
-        message: 'Multiple power outages detected in the northern region. Immediate attention required.',
-        type: 'error',
-        priority: 'critical',
-        isRead: false,
-        createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), // 8 hours ago
-        actionRequired: true
-      },
-      {
-        id: 'notif-5',
-        title: 'Weekly Report Available',
-        message: 'Your weekly performance report is now available for review.',
-        type: 'system',
-        priority: 'low',
-        isRead: true,
-        createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
-        actionRequired: false
-      }
-    ];
-    
+    // Return empty array if no live data is available - DO NOT show mock data
     return {
       success: true,
-      data: sampleNotifications
+      data: []
     };
   }
 

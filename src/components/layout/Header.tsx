@@ -25,6 +25,7 @@ import { LanguageSwitcher } from '@/components/ui/language-switcher';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { apiService } from '@/lib/api';
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -38,7 +39,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [notifications, setNotifications] = useState(3);
+  const [notifications, setNotifications] = useState(0);
 
   useEffect(() => {
     // Update time every minute
@@ -53,8 +54,31 @@ export function Header({ onMenuClick }: HeaderProps) {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
+    // Fetch live notification count
+    const fetchNotificationCount = async () => {
+      try {
+        const result = await apiService.getNotifications();
+        if (result.success && result.data) {
+          // Count only unread notifications
+          const unreadCount = result.data.filter((notification: any) => !notification.isRead).length;
+          setNotifications(unreadCount);
+        }
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+        // Don't show any count if there's an error
+        setNotifications(0);
+      }
+    };
+
+    // Initial fetch
+    fetchNotificationCount();
+
+    // Refresh notification count every 30 seconds
+    const notificationInterval = setInterval(fetchNotificationCount, 30000);
+
     return () => {
       clearInterval(timeInterval);
+      clearInterval(notificationInterval);
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
