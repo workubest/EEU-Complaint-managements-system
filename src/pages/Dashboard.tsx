@@ -3,12 +3,12 @@ import { StatsCards } from '@/components/dashboard/StatsCards';
 import { RecentComplaints } from '@/components/dashboard/RecentComplaints';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
-import { PerformanceMetrics } from '@/components/dashboard/PerformanceMetrics';
+
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { apiService } from '@/lib/api';
-import { setupBackend } from '@/utils/initializeBackend';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -77,7 +77,7 @@ export function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-  const [setupLoading, setSetupLoading] = useState(false);
+
   
   // Dashboard customization states
   const [showCustomizeDialog, setShowCustomizeDialog] = useState(false);
@@ -90,7 +90,6 @@ export function Dashboard() {
   const [dashboardLayout, setDashboardLayout] = useState({
     showWeather: true,
     showQuickInsights: false,
-    showPerformanceMetrics: true,
     showActivityFeed: true,
     showRecentComplaints: true,
     showSystemStatus: true,
@@ -213,46 +212,7 @@ export function Dashboard() {
     }
   };
 
-  const handleSetupBackend = async () => {
-    if (role !== 'admin') {
-      toast({
-        title: "Access Denied",
-        description: "Only administrators can initialize the backend.",
-        variant: "destructive"
-      });
-      return;
-    }
 
-    setSetupLoading(true);
-    try {
-      const result = await setupBackend();
-      
-      if (result.success) {
-        toast({
-          title: "Setup Successful",
-          description: result.message,
-          variant: "default"
-        });
-        // Refresh dashboard data after successful setup
-        fetchDashboardData();
-      } else {
-        toast({
-          title: "Setup Failed",
-          description: result.message,
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
-      console.error('Setup error:', error);
-      toast({
-        title: "Setup Error",
-        description: "An unexpected error occurred during setup.",
-        variant: "destructive"
-      });
-    } finally {
-      setSetupLoading(false);
-    }
-  };
 
   // System status functions
   const checkSystemStatus = async () => {
@@ -413,7 +373,6 @@ export function Dashboard() {
     const defaultLayout = {
       showWeather: true,
       showQuickInsights: false,
-      showPerformanceMetrics: true,
       showActivityFeed: true,
       showRecentComplaints: true,
       showSystemStatus: true,
@@ -592,18 +551,7 @@ export function Dashboard() {
               <span className="hidden md:inline">Export</span>
             </Button>
 
-            {role === 'admin' && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSetupBackend}
-                disabled={setupLoading}
-                className="flex items-center space-x-1"
-              >
-                <Settings className={`h-4 w-4 ${setupLoading ? 'animate-spin' : ''}`} />
-                <span>{setupLoading ? 'Setting up...' : 'Setup Backend'}</span>
-              </Button>
-            )}
+
             <Button
               variant="outline"
               size="sm"
@@ -684,12 +632,7 @@ export function Dashboard() {
             <RecentComplaints />
           </div>
           
-          {/* Performance Metrics for Managers and Admins */}
-          {(role === 'admin' || role === 'manager') && (
-            <div className="animate-slide-up" style={{ animationDelay: '0.5s' }}>
-              <PerformanceMetrics />
-            </div>
-          )}
+
         </div>
 
         {/* Right Column - Activity Feed */}

@@ -29,8 +29,7 @@ const CustomerPortal = lazy(() => import("@/pages/CustomerPortal"));
 const LandingPage = lazy(() => import("@/pages/LandingPage"));
 const QuickReport = lazy(() => import("@/pages/QuickReport"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const PDFTestComponent = lazy(() => import("@/components/test/PDFTestComponent").then(module => ({ default: module.PDFTestComponent })));
-const SimplePDFTest = lazy(() => import("@/components/test/SimplePDFTest").then(module => ({ default: module.SimplePDFTest })));
+
 
 // Loading component
 const LoadingSpinner = memo(() => (
@@ -53,8 +52,7 @@ const AppRoutes = memo(() => {
         <Route path="/customer-portal" element={<CustomerPortal />} />
         <Route path="/quick-report" element={<QuickReport />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/pdf-test" element={<PDFTestComponent />} />
-        <Route path="/pdf-diagnostic" element={<SimplePDFTest />} />
+
         
         {/* Redirect /notifications to /dashboard/notifications */}
         <Route path="/notifications" element={<Navigate to="/dashboard/notifications" replace />} />

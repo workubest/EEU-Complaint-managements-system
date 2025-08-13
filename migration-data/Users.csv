@@ -1,6 +1,0 @@
-ID,Name,Email,Password,Role,Region,Department,Phone,Is Active,Created At,Updated At
-USR-001,Abebe Kebede,admin@eeu.gov.et,admin123,admin,Addis Ababa,System Administration,+251-11-123-4567,true,2025-01-01T00:00:00Z,2025-01-01T00:00:00Z
-USR-002,Tigist Haile,manager@eeu.gov.et,manager123,manager,Oromia,Regional Management,+251-11-234-5678,true,2025-01-02T00:00:00Z,2025-01-02T00:00:00Z
-USR-003,Getachew Tadesse,foreman@eeu.gov.et,foreman123,foreman,Amhara,Field Operations,+251-11-345-6789,true,2025-01-03T00:00:00Z,2025-01-03T00:00:00Z
-USR-004,Meron Tesfaye,attendant@eeu.gov.et,attendant123,call-attendant,Addis Ababa,Control Room,+251-11-456-7890,true,2025-01-04T00:00:00Z,2025-01-04T00:00:00Z
-USR-005,Dawit Solomon,tech@eeu.gov.et,tech123,technician,Addis Ababa,Field Service,+251-11-567-8901,true,2025-01-05T00:00:00Z,2025-01-05T00:00:00Z

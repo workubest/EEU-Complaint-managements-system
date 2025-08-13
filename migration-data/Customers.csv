@@ -1,4 +1,0 @@
-ID,Name,Email,Phone,Address,Region,Meter Number,Account Number,Created At,Updated At
-CUST-001,Almaz Tesfaye,almaz.tesfaye@gmail.com,+251-911-123456,"Kirkos Sub-city, Addis Ababa",Addis Ababa,AAM-001234,ACC-789456,2025-01-01T00:00:00Z,2025-01-01T00:00:00Z
-CUST-002,Bereket Hailu,bereket.hailu@yahoo.com,+251-912-234567,"Bahir Dar, Amhara Region",Amhara,AMR-002345,ACC-890567,2025-01-02T00:00:00Z,2025-01-02T00:00:00Z
-CUST-003,Chaltu Bekele,chaltu.bekele@gmail.com,+251-913-345678,"Adama, Oromia Region",Oromia,ORM-003456,ACC-901678,2025-01-03T00:00:00Z,2025-01-03T00:00:00Z
