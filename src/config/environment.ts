@@ -10,7 +10,7 @@ export interface EnvironmentConfig {
 }
 
 // Google Apps Script URL - update this with your own deployment URL
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRtSTJjIA9_Hx-SpX95dJ2hRg1SSkEGLlyqjWElWJoiGQWtLzt7pwYeyeycah7KpI/exec';
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6Do0ky06Pm6OtY62iTOuSWABmZsQAVdqtaXN27SQb8Hgtv_JqVuMPNdXKh-fW5bU/exec';
 
 // Detect environment
 const isProduction = import.meta.env.PROD || !window.location.hostname.includes('localhost');

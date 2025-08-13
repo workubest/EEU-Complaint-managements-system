@@ -1,6 +1,5 @@
 // API service for Google Apps Script backend integration
 import { environment } from '../config/environment';
-import { apiCache, invalidateComplaintCache, invalidateUserCache, invalidateCustomerCache } from './api-cache';
 
 export interface ApiResponse<T = any> {
   success: boolean;
