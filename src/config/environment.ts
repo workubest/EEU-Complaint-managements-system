@@ -32,8 +32,8 @@ export const environment: EnvironmentConfig = {
   isProduction,
   isDevelopment,
   googleAppsScriptUrl: GOOGLE_APPS_SCRIPT_URL,
-  // Use direct Google Apps Script URL in development for testing
-  apiBaseUrl: isProduction ? '/.netlify/functions/proxy' : GOOGLE_APPS_SCRIPT_URL,
+  // Use direct Google Apps Script URL for both development and production for better reliability
+  apiBaseUrl: GOOGLE_APPS_SCRIPT_URL,
   forceRealBackend: true,
   forceDemoMode: false
 };

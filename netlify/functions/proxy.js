@@ -2,13 +2,14 @@
 
 // Google Apps Script URL - configurable via environment variable
 const GOOGLE_APPS_SCRIPT_URL = process.env.GOOGLE_APPS_SCRIPT_URL || 
-  'https://script.google.com/macros/s/AKfycby6Do0ky06Pm6OtY62iTOuSWABmZsQAVdqtaXN27SQb8Hgtv_JqVuMPNdXKh-fW5bU/exec';
+  'https://script.google.com/macros/s/AKfycbwRtSTJjIA9_Hx-SpX95dJ2hRg1SSkEGLlyqjWElWJoiGQWtLzt7pwYeyeycah7KpI/exec';
 
 exports.handler = async function(event, context) {
   console.log('🔄 Netlify Function - Proxy Request');
   console.log('📝 Method:', event.httpMethod);
-  console.log('🔗 Headers:', event.headers);
-  console.log('📊 Query Params:', event.queryStringParameters);
+  console.log('🔗 Headers:', JSON.stringify(event.headers, null, 2));
+  console.log('📊 Query Params:', JSON.stringify(event.queryStringParameters, null, 2));
+  console.log('🌐 Google Apps Script URL:', GOOGLE_APPS_SCRIPT_URL);
   
   // Handle preflight CORS requests
   if (event.httpMethod === 'OPTIONS') {
@@ -34,8 +35,10 @@ exports.handler = async function(event, context) {
       try {
         requestBody = JSON.parse(event.body);
         action = requestBody.action || '';
+        console.log('📦 Parsed request body:', JSON.stringify(requestBody, null, 2));
       } catch (parseError) {
         console.error('❌ Error parsing request body:', parseError);
+        console.log('📝 Raw body:', event.body);
         requestBody = {};
       }
     }
@@ -55,9 +58,38 @@ exports.handler = async function(event, context) {
       }
     }
 
+    // If still no action, try to extract from path
+    if (!action && event.path) {
+      const pathParts = event.path.split('/');
+      const actionFromPath = pathParts[pathParts.length - 1];
+      if (actionFromPath && actionFromPath !== 'proxy') {
+        action = actionFromPath;
+        requestBody.action = action;
+      }
+    }
+
     console.log('📤 Forwarding to Google Apps Script:');
     console.log('🎯 Action:', action);
-    console.log('📦 Request Body:', JSON.stringify(requestBody, null, 2));
+    console.log('📦 Final Request Body:', JSON.stringify(requestBody, null, 2));
+
+    // Validate that we have an action
+    if (!action) {
+      console.error('❌ No action specified in request');
+      return {
+        statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          success: false,
+          error: 'No action specified',
+          message: 'Request must include an action parameter'
+        }),
+      };
+    }
 
     // Build the request to Google Apps Script
     let scriptUrl = GOOGLE_APPS_SCRIPT_URL;
@@ -69,7 +101,7 @@ exports.handler = async function(event, context) {
       body: JSON.stringify(requestBody),
     };
 
-    // For GET requests or when explicitly requested, use GET method with URL parameters
+    // For simple GET requests, we can also try URL parameters
     if (event.httpMethod === 'GET' && Object.keys(requestBody).length > 0) {
       const params = new URLSearchParams();
       Object.keys(requestBody).forEach(key => {
@@ -77,13 +109,40 @@ exports.handler = async function(event, context) {
           params.append(key, String(requestBody[key]));
         }
       });
-      scriptUrl = `${GOOGLE_APPS_SCRIPT_URL}?${params.toString()}`;
-      fetchOptions = {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      };
+      
+      // Try both POST and GET approaches for better compatibility
+      console.log('🔄 Trying GET request first...');
+      const getUrl = `${GOOGLE_APPS_SCRIPT_URL}?${params.toString()}`;
+      console.log('🌐 GET URL:', getUrl);
+      
+      try {
+        const getResponse = await fetch(getUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+        
+        if (getResponse.ok) {
+          const getData = await getResponse.json();
+          console.log('✅ GET request successful:', JSON.stringify(getData, null, 2));
+          
+          return {
+            statusCode: 200,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+              'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(getData),
+          };
+        } else {
+          console.log('⚠️ GET request failed, falling back to POST');
+        }
+      } catch (getError) {
+        console.log('⚠️ GET request error, falling back to POST:', getError.message);
+      }
     }
 
     console.log('🌐 Final URL:', scriptUrl);
@@ -97,12 +156,22 @@ exports.handler = async function(event, context) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('❌ Google Apps Script Error:', errorText);
+      console.error('❌ Google Apps Script Error Response:', errorText);
       throw new Error(`Google Apps Script error: ${response.status} - ${errorText}`);
     }
 
-    const data = await response.json();
-    console.log('✅ Google Apps Script Response:', JSON.stringify(data, null, 2));
+    const responseText = await response.text();
+    console.log('📝 Raw Response Text:', responseText);
+
+    let data;
+    try {
+      data = JSON.parse(responseText);
+      console.log('✅ Parsed Google Apps Script Response:', JSON.stringify(data, null, 2));
+    } catch (parseError) {
+      console.error('❌ Failed to parse response as JSON:', parseError);
+      console.log('📝 Response text that failed to parse:', responseText);
+      throw new Error(`Invalid JSON response from Google Apps Script: ${responseText}`);
+    }
 
     // Return successful response with CORS headers
     return {
@@ -118,6 +187,7 @@ exports.handler = async function(event, context) {
 
   } catch (error) {
     console.error('❌ Proxy Error:', error);
+    console.error('❌ Error Stack:', error.stack);
     
     // Return error response with CORS headers
     return {
@@ -132,7 +202,8 @@ exports.handler = async function(event, context) {
         success: false,
         error: 'Proxy error',
         details: error.message,
-        message: 'Failed to connect to backend service'
+        message: 'Failed to connect to backend service. Please check Google Apps Script deployment.',
+        timestamp: new Date().toISOString()
       }),
     };
   }

@@ -5,7 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
-  GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby6Do0ky06Pm6OtY62iTOuSWABmZsQAVdqtaXN27SQb8Hgtv_JqVuMPNdXKh-fW5bU/exec"
+  GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRtSTJjIA9_Hx-SpX95dJ2hRg1SSkEGLlyqjWElWJoiGQWtLzt7pwYeyeycah7KpI/exec"
 
 [functions]
   node_bundler = "esbuild"

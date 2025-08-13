@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 EEU CMS Database Connection Test</h1>
+        <p>This test verifies that your deployed application can connect to the Google Apps Script database.</p>
+        
+        <div id="results"></div>
+        
+        <button onclick="testHealthCheck()">🏥 Test Health Check</button>
+        <button onclick="testLogin()">🔐 Test Login</button>
+        <button onclick="testGetComplaints()">📋 Test Get Complaints</button>
+        <button onclick="runAllTests()">🚀 Run All Tests</button>
+        <button onclick="clearResults()">🧹 Clear Results</button>
+    </div>
+
+    <script>
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRtSTJjIA9_Hx-SpX95dJ2hRg1SSkEGLlyqjWElWJoiGQWtLzt7pwYeyeycah7KpI/exec';
+        
+        function addResult(type, title, message, data = null) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            
+            let content = `<strong>${title}</strong><br>${message}`;
+            if (data) {
+                content += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            
+            div.innerHTML = content;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        async function makeRequest(action, data = {}) {
+            const requestData = { action, ...data };
+            
+            try {
+                addResult('info', '📤 Request', `Making request: ${action}`, requestData);
+                
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify(requestData)
+                });
+                
+                addResult('info', '📥 Response Status', `Status: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const responseText = await response.text();
+                const responseData = JSON.parse(responseText);
+                
+                addResult('success', '✅ Success', `Request completed successfully`, responseData);
+                return responseData;
+                
+            } catch (error) {
+                addResult('error', '❌ Error', `Request failed: ${error.message}`);
+                throw error;
+            }
+        }
+        
+        async function testHealthCheck() {
+            addResult('info', '🏥 Health Check Test', 'Testing basic connectivity...');
+            try {
+                const result = await makeRequest('healthCheck');
+                if (result.success) {
+                    addResult('success', '✅ Health Check Passed', 'Database connection is working!');
+                } else {
+                    addResult('error', '❌ Health Check Failed', result.error || 'Unknown error');
+                }
+            } catch (error) {
+                addResult('error', '❌ Health Check Failed', `Connection error: ${error.message}`);
+            }
+        }
+        
+        async function testLogin() {
+            addResult('info', '🔐 Login Test', 'Testing authentication...');
+            try {
+                const result = await makeRequest('login', {
+                    email: 'admin@eeu.gov.et',
+                    password: 'admin123'
+                });
+                if (result.success && result.data && result.data.user) {
+                    addResult('success', '✅ Login Successful', `Logged in as: ${result.data.user.name} (${result.data.user.role})`);
+                } else {
+                    addResult('error', '❌ Login Failed', result.error || 'Invalid credentials');
+                }
+            } catch (error) {
+                addResult('error', '❌ Login Failed', `Authentication error: ${error.message}`);
+            }
+        }
+        
+        async function testGetComplaints() {
+            addResult('info', '📋 Get Complaints Test', 'Testing data retrieval...');
+            try {
+                const result = await makeRequest('getComplaints', {
+                    limit: 5
+                });
+                if (result.success && result.data) {
+                    const count = Array.isArray(result.data) ? result.data.length : 0;
+                    addResult('success', '✅ Data Retrieval Successful', `Retrieved ${count} complaints from database`);
+                } else {
+                    addResult('error', '❌ Data Retrieval Failed', result.error || 'No data returned');
+                }
+            } catch (error) {
+                addResult('error', '❌ Data Retrieval Failed', `Database error: ${error.message}`);
+            }
+        }
+        
+        async function runAllTests() {
+            clearResults();
+            addResult('info', '🚀 Running All Tests', 'Starting comprehensive database connection test...');
+            
+            await testHealthCheck();
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+            
+            await testLogin();
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+            
+            await testGetComplaints();
+            
+            addResult('info', '🏁 Tests Complete', 'All tests have been executed. Check results above.');
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        // Auto-run health check on page load
+        window.addEventListener('load', () => {
+            addResult('info', '🌐 Page Loaded', `Testing connection to: ${GOOGLE_APPS_SCRIPT_URL}`);
+            setTimeout(testHealthCheck, 1000);
+        });
+    </script>
+</body>
+</html>
