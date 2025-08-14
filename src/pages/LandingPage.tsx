@@ -184,16 +184,12 @@ const LandingPage: React.FC = () => {
               className="shadow-xl border-2 border-eeu-orange bg-white cursor-pointer hover:shadow-2xl transition-shadow duration-300" 
               onClick={() => navigate('/customer-portal')}
             >
-              <CardHeader className="text-center pb-6 bg-gradient-to-br from-eeu-orange to-orange-600 text-white rounded-t-lg">
-                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <CardHeader className="text-center pb-6 bg-white border-b-4 border-eeu-orange rounded-t-lg">
+                <div className="w-24 h-24 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <FileText className="w-12 h-12 text-eeu-orange" />
                 </div>
                 <div className="relative">
-                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
-                    {t('landing.customer_portal')}
-                  </CardTitle>
-                  {/* Enhanced shadow effect */}
-                  <CardTitle className="absolute inset-0 text-3xl font-bold text-black/40 blur-sm transform translate-x-1 translate-y-1">
+                  <CardTitle className="text-3xl font-bold text-eeu-orange drop-shadow-lg relative z-10">
                     {t('landing.customer_portal')}
                   </CardTitle>
                 </div>
@@ -228,7 +224,7 @@ const LandingPage: React.FC = () => {
                     {t('landing.feature.multilingual')}
                   </li>
                 </ul>
-                <Button className="w-full bg-eeu-orange hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-lg" size="lg">
+                <Button className="w-full bg-white border-2 border-eeu-orange text-eeu-orange hover:bg-eeu-orange hover:text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-lg" size="lg">
                   {t('landing.access_customer_portal')}
                   <ArrowRight className="ml-3 w-6 h-6" />
                 </Button>
@@ -240,16 +236,12 @@ const LandingPage: React.FC = () => {
               className="shadow-xl border-2 border-eeu-green bg-white cursor-pointer hover:shadow-2xl transition-shadow duration-300" 
               onClick={() => navigate('/login')}
             >
-              <CardHeader className="text-center pb-6 bg-gradient-to-br from-eeu-green to-green-600 text-white rounded-t-lg">
-                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <CardHeader className="text-center pb-6 bg-white border-b-4 border-eeu-green rounded-t-lg">
+                <div className="w-24 h-24 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <Shield className="w-12 h-12 text-eeu-green" />
                 </div>
                 <div className="relative">
-                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
-                    {t('landing.staff_portal')}
-                  </CardTitle>
-                  {/* Enhanced shadow effect */}
-                  <CardTitle className="absolute inset-0 text-3xl font-bold text-black/40 blur-sm transform translate-x-1 translate-y-1">
+                  <CardTitle className="text-3xl font-bold text-eeu-green drop-shadow-lg relative z-10">
                     {t('landing.staff_portal')}
                   </CardTitle>
                 </div>
@@ -284,7 +276,7 @@ const LandingPage: React.FC = () => {
                     {t('landing.feature.role_permissions')}
                   </li>
                 </ul>
-                <Button className="w-full bg-eeu-green hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-lg" size="lg">
+                <Button className="w-full bg-white border-2 border-eeu-green text-eeu-green hover:bg-eeu-green hover:text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-lg" size="lg">
                   {t('landing.staff_login')}
                   <ArrowRight className="ml-3 w-6 h-6" />
                 </Button>
