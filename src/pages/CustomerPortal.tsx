@@ -377,7 +377,7 @@ export function CustomerPortal() {
               
               {/* Interactive Tooltip */}
               {isLogoHovered && (
-                <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-lg text-sm font-medium animate-fade-in">
+                <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 bg-white border-2 border-eeu-orange text-eeu-orange px-4 py-2 rounded-lg text-sm font-medium animate-fade-in shadow-lg">
                   Click me for magic! ✨
                 </div>
               )}
@@ -891,7 +891,7 @@ export function CustomerPortal() {
             
             {/* Tooltip */}
             <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div className="bg-black/80 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap">
+              <div className="bg-white border-2 border-eeu-green text-eeu-green px-3 py-1 rounded-lg text-sm whitespace-nowrap shadow-lg">
                 Back to top ⬆️
               </div>
             </div>
