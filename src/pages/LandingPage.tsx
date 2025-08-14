@@ -342,11 +342,23 @@ const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-8">
-              <div className="w-20 h-20 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Zap className="w-10 h-10 text-white" />
+              <div className="relative w-24 h-24 mx-auto mb-6">
+                {/* Enhanced gradient background with animation */}
+                <div className="absolute inset-0 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full shadow-xl animate-pulse"></div>
+                <div className="absolute inset-1 bg-gradient-to-r from-eeu-orange to-eeu-green rounded-full opacity-70"></div>
+                <div className="relative w-full h-full bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full flex items-center justify-center shadow-2xl">
+                  <Zap className="w-12 h-12 text-white drop-shadow-lg" />
+                </div>
+                {/* Rotating border effect */}
+                <div className="absolute inset-0 border-2 border-transparent border-t-white/30 rounded-full animate-spin opacity-50"></div>
               </div>
-              <h4 className="text-2xl font-bold text-eeu-orange mb-3 drop-shadow-lg">{t('login.title')}</h4>
-              <p className="text-eeu-green text-lg font-semibold">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>
+              <h4 className="text-3xl font-bold text-eeu-orange mb-3 drop-shadow-lg">{t('login.title')}</h4>
+              <p className="text-eeu-green text-xl font-bold">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>
+              <div className="flex justify-center mt-4 space-x-4">
+                <div className="w-2 h-2 bg-eeu-orange rounded-full animate-ping"></div>
+                <div className="w-2 h-2 bg-eeu-green rounded-full animate-ping" style={{ animationDelay: '0.3s' }}></div>
+                <div className="w-2 h-2 bg-eeu-orange rounded-full animate-ping" style={{ animationDelay: '0.6s' }}></div>
+              </div>
             </div>
             <div className="border-t border-gray-200 pt-8 space-y-4">
               <div className="flex flex-col md:flex-row justify-center items-center gap-2 text-sm">
