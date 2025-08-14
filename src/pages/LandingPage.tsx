@@ -344,21 +344,23 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-eeu-green to-eeu-orange text-white py-12">
+      <footer className="bg-white border-t-4 border-eeu-orange py-12 relative">
+        {/* Gradient border effect */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-eeu-green to-eeu-orange"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-8">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Zap className="w-10 h-10 text-eeu-orange" />
+              <div className="w-20 h-20 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Zap className="w-10 h-10 text-white" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-3 drop-shadow-lg">{t('login.title')}</h4>
-              <p className="text-white/90 text-lg font-medium">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>
+              <h4 className="text-2xl font-bold text-eeu-orange mb-3 drop-shadow-lg">{t('login.title')}</h4>
+              <p className="text-eeu-green text-lg font-semibold">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>
             </div>
-            <div className="border-t border-white/30 pt-8">
-              <p className="text-white/90 text-lg font-medium">
+            <div className="border-t border-gray-200 pt-8">
+              <p className="text-gray-700 text-lg font-medium">
                 © 2024 {t('login.title')}. {t('landing.footer.rights')}
               </p>
-              <p className="text-white/80 mt-3 font-medium">
+              <p className="text-gray-600 mt-3 font-medium">
                 {t('landing.footer.version')} 1.0.0
               </p>
             </div>
