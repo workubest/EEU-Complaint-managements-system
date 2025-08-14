@@ -14,7 +14,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { COMPLAINT_CATEGORIES, ComplaintCategory, ComplaintPriority } from '@/types/complaint';
-import { Loader2, CheckCircle, AlertCircle, User, Building2, Zap, Shield, Users, FileText, Clock } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, User, Building2, Zap, Shield, Users, FileText, Clock, ChevronDown } from 'lucide-react';
 import { Footer } from '@/components/layout/Footer';
 
 // API integration
@@ -285,12 +285,24 @@ export function CustomerPortal() {
     const isBusinessPartner = customerData.type === 'business_partner';
 
     return (
-      <Card className="mb-6 border-eeu-orange bg-gradient-eeu-light">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center space-x-2 text-eeu-green">
-            {isBusinessPartner ? <Building2 className="h-5 w-5" /> : <User className="h-5 w-5" />}
-            <span>{t("customer_portal.account_verified")}</span>
-            <CheckCircle className="h-5 w-5 text-eeu-green" />
+      <Card className="mb-6 border-2 border-eeu-green/20 bg-gradient-to-r from-eeu-green/5 to-eeu-orange/5 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <CardHeader className="pb-3 bg-gradient-to-r from-eeu-green/10 to-eeu-orange/10 rounded-t-lg">
+          <CardTitle className="flex items-center space-x-3 text-eeu-green">
+            {/* Enhanced User/Business Icon */}
+            <div className="relative w-8 h-8">
+              <div className="absolute inset-0 bg-eeu-green/20 rounded-full animate-pulse"></div>
+              <div className="absolute inset-0.5 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                {isBusinessPartner ? <Building2 className="h-4 w-4 text-white" /> : <User className="h-4 w-4 text-white" />}
+              </div>
+            </div>
+            <span className="font-bold">{t("customer_portal.account_verified")}</span>
+            {/* Enhanced Check Icon */}
+            <div className="relative w-8 h-8">
+              <div className="absolute inset-0 bg-eeu-green/20 rounded-full animate-pulse"></div>
+              <div className="absolute inset-0.5 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                <CheckCircle className="h-4 w-4 text-white" />
+              </div>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
@@ -485,10 +497,24 @@ export function CustomerPortal() {
                 Our secure portal provides you with direct access to customer support and account management tools.
               </p>
               
-              {/* Interactive Arrow */}
-              <div className="flex justify-center mt-6">
-                <div className="animate-bounce">
-                  <span className="text-3xl">⬇️</span>
+              {/* Enhanced Interactive Arrow */}
+              <div className="flex justify-center mt-8">
+                <div className="relative group cursor-pointer">
+                  {/* Outer glow ring */}
+                  <div className="absolute inset-0 w-16 h-16 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
+                  {/* Main arrow container */}
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-eeu-green via-green-500 to-eeu-orange rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 animate-bounce">
+                    <ChevronDown className="w-8 h-8 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  {/* Rotating accent ring */}
+                  <div className="absolute inset-0 w-16 h-16 border-2 border-eeu-orange/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
+                  
+                  {/* Tooltip */}
+                  <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-white border-2 border-eeu-green text-eeu-green px-3 py-1 rounded-lg text-sm whitespace-nowrap shadow-lg font-semibold">
+                      Start here ↓
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -500,24 +526,53 @@ export function CustomerPortal() {
         {/* Step 1: Enhanced Account Validation */}
         {step === 'account_validation' && (
           <div className="space-y-8">
-            {/* Main Account Validation Card - First */}
-            <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm hover:shadow-3xl transition-all duration-500">
-              <CardHeader className="bg-gradient-eeu text-white rounded-t-xl relative overflow-hidden">
+            {/* Enhanced Main Account Validation Card */}
+            <Card className="border-2 border-eeu-orange/20 shadow-2xl bg-white/95 backdrop-blur-sm hover:shadow-3xl hover:border-eeu-orange transition-all duration-500 transform hover:scale-[1.02]">
+              <CardHeader className="bg-gradient-to-r from-eeu-green via-eeu-green to-eeu-orange text-white rounded-t-xl relative overflow-hidden">
+                {/* Enhanced Background Effects */}
                 <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-                <CardTitle className="flex items-center space-x-3 relative z-10">
-                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                    <span className="text-xl">🔍</span>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/10 to-transparent rounded-full translate-y-12 -translate-x-12 animate-pulse" style={{ animationDelay: '1s' }}></div>
+                
+                <CardTitle className="flex items-center space-x-4 relative z-10">
+                  {/* Enhanced Icon Container */}
+                  <div className="relative w-12 h-12">
+                    {/* Outer glow ring */}
+                    <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
+                    {/* Main icon background */}
+                    <div className="absolute inset-1 bg-white/30 rounded-full flex items-center justify-center shadow-lg">
+                      <CheckCircle className="w-6 h-6 text-white drop-shadow-lg" />
+                    </div>
+                    {/* Rotating accent ring */}
+                    <div className="absolute inset-0 border-2 border-white/40 rounded-full animate-spin" style={{ animationDuration: '8s' }}></div>
                   </div>
-                  <span className="text-xl">Account Validation</span>
+                  <div>
+                    <span className="text-xl font-bold drop-shadow-lg">Account Validation</span>
+                    <p className="text-white/80 text-sm font-medium">Secure access verification</p>
+                  </div>
                 </CardTitle>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
+                
+                {/* Floating particles */}
+                <div className="absolute top-4 right-20 w-1 h-1 bg-white/60 rounded-full animate-ping"></div>
+                <div className="absolute bottom-4 left-20 w-1 h-1 bg-white/60 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
               </CardHeader>
               
               <CardContent className="space-y-8 pt-8 pb-8">
                 <div className="text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange/20 to-eeu-orange/40 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto shadow-lg">
-                    <AlertCircle className="h-10 w-10 text-eeu-orange" />
+                  {/* Enhanced Central Icon */}
+                  <div className="relative w-24 h-24 mx-auto">
+                    {/* Outer glow ring */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange to-orange-600 rounded-full opacity-20 animate-pulse"></div>
+                    {/* Middle ring */}
+                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-orange/30 to-eeu-orange/50 rounded-full border-2 border-eeu-orange/60"></div>
+                    {/* Main icon background */}
+                    <div className="absolute inset-4 bg-gradient-to-br from-eeu-orange via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-xl">
+                      <AlertCircle className="w-8 h-8 text-white drop-shadow-lg" />
+                    </div>
+                    {/* Rotating accent ring */}
+                    <div className="absolute inset-0 border-2 border-eeu-orange/30 rounded-full animate-spin" style={{ animationDuration: '6s' }}></div>
+                    {/* Counter-rotating inner ring */}
+                    <div className="absolute inset-3 border border-eeu-orange/20 rounded-full animate-spin" style={{ animationDuration: '4s', animationDirection: 'reverse' }}></div>
                   </div>
                   <h3 className="text-2xl font-bold text-eeu-green">
                     Enter Your Account Number
@@ -543,12 +598,24 @@ export function CustomerPortal() {
                         required
                       />
                       <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                        <span className="text-eeu-orange">🔢</span>
+                        {/* Enhanced Account Number Icon */}
+                        <div className="relative w-8 h-8">
+                          <div className="absolute inset-0 bg-eeu-orange/20 rounded-full animate-pulse"></div>
+                          <div className="absolute inset-1 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center shadow-lg">
+                            <Building2 className="w-4 h-4 text-white" />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="bg-eeu-green/10 rounded-lg p-4 border-l-4 border-eeu-green">
+                    <div className="bg-gradient-to-r from-eeu-green/10 to-eeu-green/5 rounded-xl p-4 border-l-4 border-eeu-green shadow-sm">
                       <p className="text-sm text-eeu-green font-medium flex items-center">
-                        <span className="mr-2">💡</span>
+                        {/* Enhanced Tip Icon */}
+                        <div className="relative w-6 h-6 mr-3">
+                          <div className="absolute inset-0 bg-eeu-green/20 rounded-full animate-pulse"></div>
+                          <div className="absolute inset-0.5 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                            <Zap className="w-3 h-3 text-white" />
+                          </div>
+                        </div>
                         You can find your account number on your electricity bill
                       </p>
                     </div>
@@ -725,11 +792,22 @@ export function CustomerPortal() {
           <Card className="border-2 border-eeu-orange/20 shadow-xl hover:shadow-2xl hover:border-eeu-orange transition-all duration-300">
             <CardHeader className="bg-gradient-to-r from-eeu-green to-eeu-orange text-white rounded-t-lg relative overflow-hidden">
               <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-              <CardTitle className="flex items-center space-x-3 relative z-10">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-white" />
+              <CardTitle className="flex items-center space-x-4 relative z-10">
+                {/* Enhanced Header Icon */}
+                <div className="relative w-12 h-12">
+                  {/* Outer glow ring */}
+                  <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
+                  {/* Main icon background */}
+                  <div className="absolute inset-1 bg-white/30 rounded-full flex items-center justify-center shadow-lg">
+                    <Zap className="w-6 h-6 text-white drop-shadow-lg" />
+                  </div>
+                  {/* Rotating accent ring */}
+                  <div className="absolute inset-0 border-2 border-white/40 rounded-full animate-spin" style={{ animationDuration: '8s' }}></div>
                 </div>
-                <span className="text-xl">{t("form.complaint_details")}</span>
+                <div>
+                  <span className="text-xl font-bold drop-shadow-lg">{t("form.complaint_details")}</span>
+                  <p className="text-white/80 text-sm font-medium">Submit your service request</p>
+                </div>
               </CardTitle>
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
             </CardHeader>
