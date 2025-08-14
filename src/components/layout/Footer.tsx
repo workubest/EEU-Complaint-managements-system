@@ -29,8 +29,8 @@ export function Footer() {
       <div className="container mx-auto px-4 py-6">
         {/* EEU Brand Icon */}
         <div className="flex justify-center mb-4">
-          <div className="w-12 h-12 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full flex items-center justify-center shadow-lg">
-            <Zap className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-2xl border-4 border-eeu-orange/40 hover:border-eeu-orange hover:shadow-3xl transition-all duration-300">
+            <Zap className="w-7 h-7 text-eeu-orange" />
           </div>
         </div>
         

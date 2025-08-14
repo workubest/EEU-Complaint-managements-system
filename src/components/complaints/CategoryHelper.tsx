@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { COMPLAINT_CATEGORIES } from '@/types/complaint';
+import { COMPLAINT_CATEGORIES } from '@/lib/constants';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CategoryHelperProps {
@@ -37,29 +37,17 @@ export function CategoryHelper({ onCategorySelect, selectedCategory }: CategoryH
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="font-medium text-sm">{t(category.labelKey)}</div>
+                <div className="font-medium text-sm">{category.label}</div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  {category.value === 'pole-fall' && 'Emergency - Safety hazard'}
-                  {category.value === 'wire-cut' && 'Power line damage'}
-                  {category.value === 'wire-sag' && 'Dangerous sagging lines'}
-                  {category.value === 'no-supply-total' && 'Area-wide outage'}
-                  {category.value === 'no-supply-partial' && 'Partial area outage'}
-                  {category.value === 'no-supply-single-house' && 'Individual customer'}
-                  {category.value === 'transformer-issue' && 'Equipment malfunction'}
-                  {category.value === 'breaker-problem' && 'Circuit breaker issues'}
-                  {category.value === 'over-voltage' && 'High voltage problems'}
-                  {category.value === 'under-voltage' && 'Low voltage issues'}
-                  {category.value === 'voltage-fluctuation' && 'Power quality issue'}
-                  {category.value === 'prepaid-meter-issue' && 'Prepaid meter problems'}
-                  {category.value === 'postpaid-meter-malfunction' && 'Postpaid meter issues'}
-                  {category.value === 'meter-reading-issue' && 'Reading problems'}
-                  {category.value === 'billing-issue' && 'Payment disputes'}
-                  {category.value === 'new-connection-request' && 'Service request'}
-                  {category.value === 'disconnection-request' && 'Service termination'}
-                  {category.value === 'reconnection-request' && 'Service restoration'}
-                  {category.value === 'line-maintenance' && 'Infrastructure repair'}
-                  {category.value === 'safety-concern' && 'Safety issue'}
-                  {category.value === 'other' && 'Other issues'}
+                  {category.value === 'power_outage' && 'Emergency - Power supply issues'}
+                  {category.value === 'billing_issue' && 'Payment and billing disputes'}
+                  {category.value === 'meter_problem' && 'Meter malfunction or reading issues'}
+                  {category.value === 'connection_request' && 'New service connection'}
+                  {category.value === 'voltage_fluctuation' && 'Power quality problems'}
+                  {category.value === 'equipment_damage' && 'Infrastructure damage'}
+                  {category.value === 'service_quality' && 'Customer service issues'}
+                  {category.value === 'safety_concern' && 'Safety hazards and risks'}
+                  {category.value === 'other' && 'Other issues not listed'}
                 </div>
               </div>
               <Badge variant="outline" className={`ml-2 ${colorClass} text-xs`}>

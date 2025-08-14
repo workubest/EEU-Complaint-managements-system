@@ -343,14 +343,10 @@ const LandingPage: React.FC = () => {
           <div className="text-center">
             <div className="mb-8">
               <div className="relative w-24 h-24 mx-auto mb-6">
-                {/* Enhanced gradient background with animation */}
-                <div className="absolute inset-0 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full shadow-xl animate-pulse"></div>
-                <div className="absolute inset-1 bg-gradient-to-r from-eeu-orange to-eeu-green rounded-full opacity-70"></div>
-                <div className="relative w-full h-full bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full flex items-center justify-center shadow-2xl">
-                  <Zap className="w-12 h-12 text-white drop-shadow-lg" />
+                {/* Enhanced static background */}
+                <div className="w-full h-full bg-white rounded-full flex items-center justify-center shadow-2xl border-4 border-eeu-orange/40 hover:border-eeu-orange hover:shadow-3xl transition-all duration-300">
+                  <Zap className="w-14 h-14 text-eeu-orange" />
                 </div>
-                {/* Rotating border effect */}
-                <div className="absolute inset-0 border-2 border-transparent border-t-white/30 rounded-full animate-spin opacity-50"></div>
               </div>
               <h4 className="text-3xl font-bold text-eeu-orange mb-3 drop-shadow-lg">{t('login.title')}</h4>
               <p className="text-eeu-green text-xl font-bold">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>

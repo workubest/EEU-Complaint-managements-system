@@ -28,7 +28,7 @@ import { apiService } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { format, subDays, subMonths, subWeeks } from 'date-fns';
 import { ETHIOPIAN_REGIONS } from '@/types/user';
-import { COMPLAINT_CATEGORIES } from '@/types/complaint';
+import { COMPLAINT_CATEGORIES } from '@/lib/constants';
 
 interface Report {
   id: string;

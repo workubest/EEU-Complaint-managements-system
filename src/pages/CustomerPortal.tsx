@@ -13,7 +13,8 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { COMPLAINT_CATEGORIES, ComplaintCategory, ComplaintPriority } from '@/types/complaint';
+import { ComplaintCategory, ComplaintPriority } from '@/types/complaint';
+import { COMPLAINT_CATEGORIES } from '@/lib/constants';
 import { Loader2, CheckCircle, AlertCircle, User, Building2, Zap, Shield, Users, FileText, Clock, ChevronDown } from 'lucide-react';
 import { Footer } from '@/components/layout/Footer';
 
@@ -289,19 +290,48 @@ export function CustomerPortal() {
         <CardHeader className="pb-3 bg-gradient-to-r from-eeu-green/10 to-eeu-orange/10 rounded-t-lg">
           <CardTitle className="flex items-center space-x-3 text-eeu-green">
             {/* Enhanced User/Business Icon */}
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-eeu-green/20 rounded-full animate-pulse"></div>
-              <div className="absolute inset-0.5 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center shadow-lg">
-                {isBusinessPartner ? <Building2 className="h-4 w-4 text-white" /> : <User className="h-4 w-4 text-white" />}
+            <div className="relative w-12 h-12 group cursor-pointer">
+              {/* Tooltip */}
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                <div className="bg-eeu-green text-white px-2 py-1 rounded text-xs whitespace-nowrap shadow-lg font-semibold">
+                  {isBusinessPartner ? 'Business Account' : 'Personal Account'}
+                </div>
               </div>
+              {/* Outer verification glow */}
+              <div className="absolute inset-0 bg-gradient-to-r from-eeu-green to-green-600 rounded-full opacity-20 animate-pulse group-hover:opacity-40 transition-opacity duration-500"></div>
+              {/* Rotating verification ring */}
+              <div className="absolute inset-0.5 border-2 border-eeu-green/40 rounded-full animate-spin group-hover:border-eeu-green transition-colors duration-300" style={{ animationDuration: '5s' }}></div>
+              {/* Main user container */}
+              <div className="absolute inset-1.5 bg-gradient-to-br from-eeu-green via-green-500 to-green-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-110">
+                {isBusinessPartner ? <Building2 className="h-5 w-5 text-white drop-shadow-lg group-hover:rotate-6 transition-transform duration-500" /> : <User className="h-5 w-5 text-white drop-shadow-lg group-hover:scale-125 transition-transform duration-500" />}
+              </div>
+              {/* Success particles */}
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-bounce opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute -bottom-1 -left-1 w-1 h-1 bg-emerald-400 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '0.2s' }}></div>
             </div>
             <span className="font-bold">{t("customer_portal.account_verified")}</span>
             {/* Enhanced Check Icon */}
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-eeu-green/20 rounded-full animate-pulse"></div>
-              <div className="absolute inset-0.5 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center shadow-lg">
-                <CheckCircle className="h-4 w-4 text-white" />
+            <div className="relative w-12 h-12 group cursor-pointer">
+              {/* Tooltip */}
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                <div className="bg-green-500 text-white px-2 py-1 rounded text-xs whitespace-nowrap shadow-lg font-semibold">
+                  Verified ✓
+                </div>
               </div>
+              {/* Outer success glow */}
+              <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-eeu-green rounded-full opacity-30 animate-pulse group-hover:animate-ping"></div>
+              {/* Success ring animation */}
+              <div className="absolute inset-0.5 border-2 border-green-400/60 rounded-full animate-spin group-hover:border-green-400 transition-colors duration-300" style={{ animationDuration: '3s' }}></div>
+              {/* Main check container */}
+              <div className="absolute inset-1.5 bg-gradient-to-br from-green-400 via-eeu-green to-green-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-125">
+                <CheckCircle className="h-5 w-5 text-white drop-shadow-lg group-hover:animate-pulse group-hover:scale-110 transition-transform duration-300" />
+              </div>
+              {/* Verification sparkles */}
+              <div className="absolute -top-0.5 left-1/2 w-1 h-1 bg-green-300 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute top-1/2 -right-0.5 w-0.5 h-0.5 bg-emerald-300 rounded-full animate-bounce opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '0.3s' }}></div>
+              <div className="absolute -bottom-0.5 left-1/4 w-1 h-1 bg-green-400 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-400" style={{ animationDelay: '0.5s' }}></div>
+              {/* Success wave */}
+              <div className="absolute inset-0 border border-green-400/30 rounded-full animate-ping group-hover:scale-150 group-hover:opacity-0 transition-all duration-1000"></div>
             </div>
           </CardTitle>
         </CardHeader>
@@ -343,6 +373,7 @@ export function CustomerPortal() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-eeu-green/5 via-white to-eeu-orange/5 relative overflow-hidden">
+
       {/* Enhanced Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-0 w-96 h-96 bg-eeu-orange rounded-full blur-3xl"></div>
@@ -425,33 +456,36 @@ export function CustomerPortal() {
 
           {/* Modern Interactive Features with EEU Brand Colors */}
           <div className="flex flex-wrap justify-center gap-6 mb-8">
-            <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center shadow-md">
-                <Zap className="w-6 h-6 text-eeu-green" />
+            <div className="group flex items-center space-x-4 bg-gradient-to-r from-white to-eeu-green/5 rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl hover:shadow-eeu-green/20 transition-all duration-300 cursor-pointer transform hover:scale-105">
+              <div className="relative w-12 h-12 bg-gradient-to-br from-eeu-green/10 to-eeu-green/20 border-2 border-eeu-green rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
+                <Zap className="w-6 h-6 text-eeu-green group-hover:scale-110 group-hover:text-green-600 transition-all duration-300" />
+                <div className="absolute inset-0 bg-eeu-green/10 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <div className="text-left">
-                <div className="text-lg font-bold text-eeu-green">24/7 Service</div>
-                <div className="text-sm text-gray-600 font-medium">Always Available</div>
+                <div className="text-lg font-bold text-eeu-green group-hover:text-green-600 transition-colors duration-300">24/7 Service</div>
+                <div className="text-sm text-gray-600 font-medium group-hover:text-eeu-green transition-colors duration-300">Always Available</div>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center shadow-md">
-                <Shield className="w-6 h-6 text-eeu-orange" />
+            <div className="group flex items-center space-x-4 bg-gradient-to-r from-white to-eeu-orange/5 rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl hover:shadow-eeu-orange/20 transition-all duration-300 cursor-pointer transform hover:scale-105">
+              <div className="relative w-12 h-12 bg-gradient-to-br from-eeu-orange/10 to-eeu-orange/20 border-2 border-eeu-orange rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
+                <Shield className="w-6 h-6 text-eeu-orange group-hover:scale-110 group-hover:text-orange-600 transition-all duration-300" />
+                <div className="absolute inset-0 bg-eeu-orange/10 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <div className="text-left">
-                <div className="text-lg font-bold text-eeu-orange">Secure Portal</div>
-                <div className="text-sm text-gray-600 font-medium">Protected Data</div>
+                <div className="text-lg font-bold text-eeu-orange group-hover:text-orange-600 transition-colors duration-300">Secure Portal</div>
+                <div className="text-sm text-gray-600 font-medium group-hover:text-eeu-orange transition-colors duration-300">Protected Data</div>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center shadow-md">
-                <Users className="w-6 h-6 text-eeu-green" />
+            <div className="group flex items-center space-x-4 bg-gradient-to-r from-white to-eeu-green/5 rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl hover:shadow-eeu-green/20 transition-all duration-300 cursor-pointer transform hover:scale-105">
+              <div className="relative w-12 h-12 bg-gradient-to-br from-eeu-green/10 to-eeu-green/20 border-2 border-eeu-green rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
+                <Users className="w-6 h-6 text-eeu-green group-hover:scale-110 group-hover:text-green-600 transition-all duration-300" />
+                <div className="absolute inset-0 bg-eeu-green/10 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <div className="text-left">
-                <div className="text-lg font-bold text-eeu-green">Customer Focus</div>
-                <div className="text-sm text-gray-600 font-medium">Your Satisfaction</div>
+                <div className="text-lg font-bold text-eeu-green group-hover:text-green-600 transition-colors duration-300">Customer Focus</div>
+                <div className="text-sm text-gray-600 font-medium group-hover:text-eeu-green transition-colors duration-300">Your Satisfaction</div>
               </div>
             </div>
           </div>
@@ -460,35 +494,39 @@ export function CustomerPortal() {
           <div className="bg-white rounded-2xl p-10 shadow-xl border-2 border-eeu-orange/20 max-w-4xl mx-auto mb-8 hover:shadow-2xl hover:border-eeu-orange transition-all duration-300">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mb-6">
-                <div className="w-16 h-16 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-lg">
-                  <Users className="w-8 h-8 text-eeu-orange" />
+                <div className="relative w-16 h-16 bg-gradient-to-br from-eeu-green/10 to-eeu-green/20 border-2 border-eeu-green rounded-full flex items-center justify-center mr-4 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer group">
+                  <Users className="w-8 h-8 text-eeu-green group-hover:scale-110 group-hover:text-green-600 transition-all duration-300" />
+                  <div className="absolute inset-0 bg-eeu-green/10 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <h2 className="text-4xl font-bold text-eeu-green">
+                <h2 className="text-4xl font-bold text-eeu-green hover:text-green-600 transition-colors duration-300">
                   Welcome to Your Customer Portal
                 </h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                    <FileText className="w-6 h-6 text-eeu-orange" />
+                <div className="group text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg hover:shadow-eeu-orange/20 transition-all duration-300 cursor-pointer transform hover:scale-105">
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-eeu-orange/10 to-eeu-orange/20 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
+                    <FileText className="w-6 h-6 text-eeu-orange group-hover:scale-110 group-hover:text-orange-600 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-eeu-orange/10 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
-                  <div className="font-bold text-eeu-orange text-lg">Submit</div>
-                  <div className="text-gray-700 font-medium">Complaints</div>
+                  <div className="font-bold text-eeu-orange text-lg group-hover:text-orange-600 transition-colors duration-300">Submit</div>
+                  <div className="text-gray-700 font-medium group-hover:text-eeu-orange transition-colors duration-300">Complaints</div>
                 </div>
-                <div className="text-center p-6 bg-gradient-to-br from-eeu-green/10 to-green-100/50 rounded-xl border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                    <Clock className="w-6 h-6 text-eeu-green" />
+                <div className="group text-center p-6 bg-gradient-to-br from-eeu-green/10 to-green-100/50 rounded-xl border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-lg hover:shadow-eeu-green/20 transition-all duration-300 cursor-pointer transform hover:scale-105">
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-eeu-green/10 to-eeu-green/20 border-2 border-eeu-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
+                    <Clock className="w-6 h-6 text-eeu-green group-hover:scale-110 group-hover:text-green-600 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-eeu-green/10 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
-                  <div className="font-bold text-eeu-green text-lg">Track</div>
-                  <div className="text-gray-700 font-medium">Progress</div>
+                  <div className="font-bold text-eeu-green text-lg group-hover:text-green-600 transition-colors duration-300">Track</div>
+                  <div className="text-gray-700 font-medium group-hover:text-eeu-green transition-colors duration-300">Progress</div>
                 </div>
-                <div className="text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                    <Users className="w-6 h-6 text-eeu-orange" />
+                <div className="group text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg hover:shadow-eeu-orange/20 transition-all duration-300 cursor-pointer transform hover:scale-105">
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-eeu-orange/10 to-eeu-orange/20 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
+                    <Users className="w-6 h-6 text-eeu-orange group-hover:scale-110 group-hover:text-orange-600 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-eeu-orange/10 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
-                  <div className="font-bold text-eeu-orange text-lg">Manage</div>
-                  <div className="text-gray-700 font-medium">Account</div>
+                  <div className="font-bold text-eeu-orange text-lg group-hover:text-orange-600 transition-colors duration-300">Manage</div>
+                  <div className="text-gray-700 font-medium group-hover:text-eeu-orange transition-colors duration-300">Account</div>
                 </div>
               </div>
               
@@ -500,14 +538,10 @@ export function CustomerPortal() {
               {/* Enhanced Interactive Arrow */}
               <div className="flex justify-center mt-8">
                 <div className="relative group cursor-pointer">
-                  {/* Outer glow ring */}
-                  <div className="absolute inset-0 w-16 h-16 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
                   {/* Main arrow container */}
-                  <div className="relative w-16 h-16 bg-gradient-to-br from-eeu-green via-green-500 to-eeu-orange rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 animate-bounce">
-                    <ChevronDown className="w-8 h-8 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                  <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-eeu-orange/40 hover:border-eeu-orange hover:shadow-2xl transition-all duration-300">
+                    <ChevronDown className="w-10 h-10 text-eeu-orange" />
                   </div>
-                  {/* Rotating accent ring */}
-                  <div className="absolute inset-0 w-16 h-16 border-2 border-eeu-orange/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
                   
                   {/* Tooltip */}
                   <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -536,19 +570,15 @@ export function CustomerPortal() {
                 
                 <CardTitle className="flex items-center space-x-4 relative z-10">
                   {/* Enhanced Icon Container */}
-                  <div className="relative w-12 h-12">
-                    {/* Outer glow ring */}
-                    <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
-                    {/* Main icon background */}
-                    <div className="absolute inset-1 bg-white/30 rounded-full flex items-center justify-center shadow-lg">
-                      <CheckCircle className="w-6 h-6 text-white drop-shadow-lg" />
+                  <div className="relative w-16 h-16">
+                    {/* Main check container */}
+                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center shadow-xl border-2 border-eeu-green/40">
+                      <CheckCircle className="w-8 h-8 text-eeu-green" />
                     </div>
-                    {/* Rotating accent ring */}
-                    <div className="absolute inset-0 border-2 border-white/40 rounded-full animate-spin" style={{ animationDuration: '8s' }}></div>
                   </div>
                   <div>
-                    <span className="text-xl font-bold drop-shadow-lg">Account Validation</span>
-                    <p className="text-white/80 text-sm font-medium">Secure access verification</p>
+                    <span className="text-xl font-bold text-eeu-orange drop-shadow-2xl shadow-black/80 bg-white/90 px-3 py-1 rounded-lg border-2 border-eeu-orange/50">Account Validation</span>
+                    <p className="text-white/90 text-sm font-medium mt-1">Secure access verification</p>
                   </div>
                 </CardTitle>
                 
@@ -560,19 +590,11 @@ export function CustomerPortal() {
               <CardContent className="space-y-8 pt-8 pb-8">
                 <div className="text-center space-y-4">
                   {/* Enhanced Central Icon */}
-                  <div className="relative w-24 h-24 mx-auto">
-                    {/* Outer glow ring */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange to-orange-600 rounded-full opacity-20 animate-pulse"></div>
-                    {/* Middle ring */}
-                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-orange/30 to-eeu-orange/50 rounded-full border-2 border-eeu-orange/60"></div>
-                    {/* Main icon background */}
-                    <div className="absolute inset-4 bg-gradient-to-br from-eeu-orange via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-xl">
-                      <AlertCircle className="w-8 h-8 text-white drop-shadow-lg" />
+                  <div className="relative w-32 h-32 mx-auto">
+                    {/* Main icon container */}
+                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center shadow-2xl border-4 border-eeu-orange/40">
+                      <AlertCircle className="w-16 h-16 text-eeu-orange" />
                     </div>
-                    {/* Rotating accent ring */}
-                    <div className="absolute inset-0 border-2 border-eeu-orange/30 rounded-full animate-spin" style={{ animationDuration: '6s' }}></div>
-                    {/* Counter-rotating inner ring */}
-                    <div className="absolute inset-3 border border-eeu-orange/20 rounded-full animate-spin" style={{ animationDuration: '4s', animationDirection: 'reverse' }}></div>
                   </div>
                   <h3 className="text-2xl font-bold text-eeu-green">
                     Enter Your Account Number
@@ -599,22 +621,53 @@ export function CustomerPortal() {
                       />
                       <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
                         {/* Enhanced Account Number Icon */}
-                        <div className="relative w-8 h-8">
-                          <div className="absolute inset-0 bg-eeu-orange/20 rounded-full animate-pulse"></div>
-                          <div className="absolute inset-1 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center shadow-lg">
-                            <Building2 className="w-4 h-4 text-white" />
+                        <div className="relative w-12 h-12 group cursor-pointer">
+                          {/* Tooltip */}
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                            <div className="bg-eeu-orange text-white px-2 py-1 rounded text-xs whitespace-nowrap shadow-lg font-semibold">
+                              Account ID
+                            </div>
                           </div>
+                          {/* Outer pulsing ring */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange to-orange-600 rounded-full opacity-20 animate-ping"></div>
+                          {/* Middle rotating ring */}
+                          <div className="absolute inset-1 border-2 border-eeu-orange/40 rounded-full animate-spin" style={{ animationDuration: '3s' }}></div>
+                          {/* Main icon container */}
+                          <div className="absolute inset-2 bg-gradient-to-br from-eeu-orange via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-110">
+                            <Building2 className="w-5 h-5 text-white drop-shadow-lg group-hover:rotate-12 transition-transform duration-500" />
+                          </div>
+                          {/* Inner counter-rotating ring */}
+                          <div className="absolute inset-3 border border-white/60 rounded-full animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }}></div>
+                          {/* Sparkle effects */}
+                          <div className="absolute -top-1 -right-1 w-2 h-2 bg-eeu-orange rounded-full animate-bounce opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <div className="absolute -bottom-1 -left-1 w-1 h-1 bg-orange-400 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '0.3s' }}></div>
                         </div>
                       </div>
                     </div>
                     <div className="bg-gradient-to-r from-eeu-green/10 to-eeu-green/5 rounded-xl p-4 border-l-4 border-eeu-green shadow-sm">
                       <p className="text-sm text-eeu-green font-medium flex items-center">
                         {/* Enhanced Tip Icon */}
-                        <div className="relative w-6 h-6 mr-3">
-                          <div className="absolute inset-0 bg-eeu-green/20 rounded-full animate-pulse"></div>
-                          <div className="absolute inset-0.5 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center shadow-lg">
-                            <Zap className="w-3 h-3 text-white" />
+                        <div className="relative w-10 h-10 mr-3 group cursor-pointer">
+                          {/* Tooltip */}
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                            <div className="bg-eeu-green text-white px-2 py-1 rounded text-xs whitespace-nowrap shadow-lg font-semibold">
+                              Helpful Tip
+                            </div>
                           </div>
+                          {/* Outer electric glow */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-eeu-green to-green-600 rounded-full opacity-30 animate-pulse group-hover:animate-ping"></div>
+                          {/* Electric arc ring */}
+                          <div className="absolute inset-0.5 border-2 border-eeu-green/50 rounded-full animate-spin group-hover:border-eeu-green transition-colors duration-300" style={{ animationDuration: '4s' }}></div>
+                          {/* Main lightning container */}
+                          <div className="absolute inset-1.5 bg-gradient-to-br from-eeu-green via-green-500 to-green-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-125">
+                            <Zap className="w-4 h-4 text-white drop-shadow-lg group-hover:animate-pulse group-hover:scale-110 transition-transform duration-300" />
+                          </div>
+                          {/* Electric sparks */}
+                          <div className="absolute -top-0.5 left-1/2 w-1 h-1 bg-yellow-400 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <div className="absolute top-1/2 -right-0.5 w-0.5 h-0.5 bg-yellow-300 rounded-full animate-bounce opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="absolute -bottom-0.5 left-1/4 w-1 h-1 bg-green-400 rounded-full animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-400" style={{ animationDelay: '0.4s' }}></div>
+                          {/* Energy waves */}
+                          <div className="absolute inset-0 border border-eeu-green/20 rounded-full animate-ping group-hover:scale-150 group-hover:opacity-0 transition-all duration-1000"></div>
                         </div>
                         You can find your account number on your electricity bill
                       </p>
@@ -652,15 +705,11 @@ export function CustomerPortal() {
                 
                 <div className="relative z-10 text-center space-y-4">
                   {/* Enhanced Icon Container */}
-                  <div className="relative w-24 h-24 mx-auto group-hover:scale-125 transition-all duration-500">
-                    {/* Outer glow ring */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange to-orange-600 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
+                  <div className="relative w-24 h-24 mx-auto">
                     {/* Main icon background */}
-                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-orange via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-eeu-orange/60 transition-all duration-500">
-                      <FileText className="w-10 h-10 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center shadow-xl border-2 border-eeu-orange/30">
+                      <FileText className="w-10 h-10 text-eeu-orange" />
                     </div>
-                    {/* Rotating accent ring */}
-                    <div className="absolute inset-0 border-2 border-eeu-orange/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
                   </div>
                   <h3 className="font-bold text-xl text-eeu-green group-hover:text-eeu-orange transition-colors duration-300">Submit Complaint</h3>
                   <p className="text-gray-700 group-hover:text-eeu-green transition-colors font-medium">Report service issues or concerns quickly and easily</p>
@@ -696,15 +745,11 @@ export function CustomerPortal() {
                 
                 <div className="relative z-10 text-center space-y-4">
                   {/* Enhanced Icon Container */}
-                  <div className="relative w-24 h-24 mx-auto group-hover:scale-125 transition-all duration-500">
-                    {/* Outer glow ring */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-green to-green-600 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
+                  <div className="relative w-24 h-24 mx-auto">
                     {/* Main icon background */}
-                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-green via-green-500 to-green-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-eeu-green/60 transition-all duration-500">
-                      <Clock className="w-10 h-10 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center shadow-xl border-2 border-eeu-green/30">
+                      <Clock className="w-10 h-10 text-eeu-green" />
                     </div>
-                    {/* Rotating accent ring */}
-                    <div className="absolute inset-0 border-2 border-eeu-green/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
                   </div>
                   <h3 className="font-bold text-xl text-eeu-orange group-hover:text-eeu-green transition-colors duration-300">Track Status</h3>
                   <p className="text-gray-700 group-hover:text-eeu-orange transition-colors font-medium">Monitor your complaint progress in real-time</p>
@@ -740,15 +785,11 @@ export function CustomerPortal() {
                 
                 <div className="relative z-10 text-center space-y-4">
                   {/* Enhanced Icon Container */}
-                  <div className="relative w-24 h-24 mx-auto group-hover:scale-125 transition-all duration-500">
-                    {/* Outer glow ring */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange to-orange-600 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
+                  <div className="relative w-24 h-24 mx-auto">
                     {/* Main icon background */}
-                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-orange via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-eeu-orange/60 transition-all duration-500">
-                      <Users className="w-10 h-10 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center shadow-xl border-2 border-eeu-orange/30">
+                      <Users className="w-10 h-10 text-eeu-orange" />
                     </div>
-                    {/* Rotating accent ring */}
-                    <div className="absolute inset-0 border-2 border-eeu-orange/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
                   </div>
                   <h3 className="font-bold text-xl text-eeu-green group-hover:text-eeu-orange transition-colors duration-300">Get Support</h3>
                   <p className="text-gray-700 group-hover:text-eeu-green transition-colors font-medium">Access customer service help and assistance</p>
@@ -794,18 +835,14 @@ export function CustomerPortal() {
               <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
               <CardTitle className="flex items-center space-x-4 relative z-10">
                 {/* Enhanced Header Icon */}
-                <div className="relative w-12 h-12">
-                  {/* Outer glow ring */}
-                  <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
-                  {/* Main icon background */}
-                  <div className="absolute inset-1 bg-white/30 rounded-full flex items-center justify-center shadow-lg">
-                    <Zap className="w-6 h-6 text-white drop-shadow-lg" />
+                <div className="relative w-16 h-16">
+                  {/* Main lightning container */}
+                  <div className="w-full h-full bg-white rounded-full flex items-center justify-center shadow-xl border-2 border-eeu-orange/40">
+                    <Zap className="w-8 h-8 text-eeu-orange" />
                   </div>
-                  {/* Rotating accent ring */}
-                  <div className="absolute inset-0 border-2 border-white/40 rounded-full animate-spin" style={{ animationDuration: '8s' }}></div>
                 </div>
                 <div>
-                  <span className="text-xl font-bold drop-shadow-lg">{t("form.complaint_details")}</span>
+                  <span className="text-xl font-bold text-eeu-orange drop-shadow-lg">{t("form.complaint_details")}</span>
                   <p className="text-white/80 text-sm font-medium">Submit your service request</p>
                 </div>
               </CardTitle>
@@ -1017,7 +1054,7 @@ export function CustomerPortal() {
                       </div>
                     ) : (
                       <div className="flex items-center justify-center space-x-2">
-                        <span>📤</span>
+                        <FileText className="h-5 w-5" />
                         <span>{t("form.submit_complaint")}</span>
                       </div>
                     )}

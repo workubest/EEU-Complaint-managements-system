@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSwitcher } from '@/components/ui/language-switcher';
-import { Eye, EyeOff, Loader2, Info } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { apiService } from '@/lib/api';
 
 export function Login() {
@@ -110,11 +110,11 @@ export function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {/* Subtle Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-eeu-orange/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-eeu-green/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-eeu-orange/8 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-eeu-green/8 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/3 rounded-full blur-3xl"></div>
       </div>
 
       {/* Enhanced Language Switcher - Top Right */}
@@ -124,42 +124,37 @@ export function Login() {
         </div>
       </div>
 
-      {/* Floating System Status - Top Left */}
+      {/* System Status - Top Left */}
       <div className="absolute top-6 left-6 z-10">
         <div className="bg-white/10 backdrop-blur-md rounded-xl px-4 py-2 border border-white/20 shadow-lg">
           <div className="flex items-center space-x-2 text-white/80 text-sm">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
             <span>System Online</span>
           </div>
         </div>
       </div>
 
       <div className="w-full max-w-md z-10">
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm hover:shadow-3xl transition-all duration-500 transform hover:scale-105">
+        <Card className="shadow-2xl border-2 border-eeu-orange/20 bg-white/95 backdrop-blur-sm hover:shadow-3xl hover:border-eeu-orange/40 transition-all duration-500 transform hover:scale-105 relative overflow-hidden">
+          {/* Card Background Animation */}
+          <div className="absolute inset-0 bg-gradient-to-br from-eeu-green/5 via-transparent to-eeu-orange/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
           <CardHeader className="text-center pb-3 relative">
             {/* Logo and Title Section */}
             <div className="flex flex-col items-center space-y-3 mb-6">
-              {/* Animated Logo Container */}
-              <div className="relative group cursor-pointer">
-                {/* Enhanced Glow Effects */}
-                <div className="absolute inset-0 bg-gradient-eeu rounded-full blur-2xl opacity-40 group-hover:opacity-70 transition-all duration-700 animate-pulse"></div>
-                <div className="absolute inset-0 bg-gradient-eeu-reverse rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
+              {/* Logo Container */}
+              <div className="relative group">
+                {/* Subtle Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-eeu rounded-full blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
                 
                 {/* Main Logo */}
                 <img 
                   src="/eeu-logo-new.png" 
                   alt="Ethiopian Electric Utility Logo" 
-                  className="w-40 h-40 object-contain relative z-10 transform group-hover:scale-125 group-hover:rotate-3 transition-all duration-700 drop-shadow-2xl"
+                  className="w-40 h-40 object-contain relative z-10 group-hover:scale-105 transition-transform duration-300 drop-shadow-xl"
                 />
                 
-                {/* Enhanced Rotating Rings */}
-                <div className="absolute inset-0 border-4 border-transparent border-t-eeu-orange border-r-eeu-green rounded-full animate-spin opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
-                <div className="absolute inset-2 border-2 border-transparent border-b-eeu-green border-l-eeu-orange rounded-full animate-spin opacity-20 group-hover:opacity-40 transition-opacity duration-500" style={{ animationDirection: 'reverse', animationDuration: '3s' }}></div>
-                
-                {/* Sparkle Effects */}
-                <div className="absolute top-4 right-4 w-3 h-3 bg-eeu-orange rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300"></div>
-                <div className="absolute bottom-6 left-6 w-2 h-2 bg-eeu-green rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '0.5s' }}></div>
-                <div className="absolute top-8 left-8 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '1s' }}></div>
+                {/* Simple Border Ring */}
+                <div className="absolute inset-0 border-2 border-transparent border-t-eeu-orange border-r-eeu-green rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
               </div>
               
               {/* Enhanced Title Section with EEU Brand Colors */}
@@ -186,9 +181,15 @@ export function Login() {
           </CardHeader>
           
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <div className="space-y-1">
-                <Label htmlFor="email" className="text-sm">{t("login.email")}</Label>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Enhanced Email Field */}
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-semibold text-eeu-green flex items-center">
+                  <div className="w-4 h-4 bg-eeu-green/20 rounded-full flex items-center justify-center mr-2">
+                    <div className="w-2 h-2 bg-eeu-green rounded-full"></div>
+                  </div>
+                  {t("login.email")}
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -196,12 +197,18 @@ export function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-10"
+                  className="h-12 border-2 border-eeu-green/30 focus:border-eeu-green focus:ring-2 focus:ring-eeu-green/20 transition-all duration-300 rounded-lg bg-gradient-to-r from-white to-eeu-green/5"
                 />
               </div>
               
-              <div className="space-y-1">
-                <Label htmlFor="password" className="text-sm">{t("login.password")}</Label>
+              {/* Enhanced Password Field */}
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-semibold text-eeu-orange flex items-center">
+                  <div className="w-4 h-4 bg-eeu-orange/20 rounded-full flex items-center justify-center mr-2">
+                    <div className="w-2 h-2 bg-eeu-orange rounded-full"></div>
+                  </div>
+                  {t("login.password")}
+                </Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -210,80 +217,105 @@ export function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-10 pr-10"
+                    className="h-12 pr-12 border-2 border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300 rounded-lg bg-gradient-to-r from-white to-eeu-orange/5"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-eeu-orange/10 rounded-r-lg transition-all duration-300"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      <EyeOff className="h-5 w-5 text-eeu-orange" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                      <Eye className="h-5 w-5 text-eeu-orange" />
                     )}
                   </Button>
                 </div>
               </div>
 
-              <Button 
+              {/* Submit Button */}
+              <button 
                 type="submit" 
-                className="w-full h-10 bg-gradient-eeu hover:opacity-90 hover:scale-105 transition-all duration-300 rounded-lg text-base font-semibold shadow-lg hover:shadow-xl transform" 
+                className="w-full h-12 text-white font-bold rounded-lg cursor-pointer hover:opacity-90 transition-opacity duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" 
                 disabled={isLoading}
+                style={{ 
+                  background: 'linear-gradient(135deg, #FF8C42 0%, #4CAF50 100%)',
+                  pointerEvents: 'auto',
+                  zIndex: 10,
+                  position: 'relative'
+                }}
               >
                 {isLoading ? (
-                  <div className="flex items-center justify-center space-x-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>{t("login.signing_in")}</span>
-                  </div>
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    {t("login.signing_in")}
+                  </>
                 ) : (
-                  <div className="flex items-center justify-center space-x-2">
-                    <span>🚀</span>
-                    <span>{t("login.signin")}</span>
-                  </div>
+                  t("login.signin")
                 )}
-              </Button>
+              </button>
             </form>
 
-            {/* Interactive Features */}
-            <div className="mt-4 space-y-3">
-              {/* Quick Access Info */}
-              <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center space-x-1 text-gray-600">
-                  <Info className="h-3 w-3" />
-                  <span>Secure Login</span>
-                </div>
-                <div className="text-eeu-orange hover:text-eeu-green cursor-pointer transition-colors font-medium">
-                  Need Help?
+            {/* Enhanced Interactive Features */}
+            <div className="mt-6 space-y-4">
+              {/* Professional Security Badge */}
+              <div className="flex items-center justify-center">
+                <div className="w-6 h-6 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full flex items-center justify-center shadow-md">
+                  <div className="w-3 h-3 bg-white rounded-full flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 bg-eeu-green rounded-full"></div>
+                  </div>
                 </div>
               </div>
 
-              {/* Demo Credentials */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-2">
-                <div className="text-xs text-blue-800 font-medium mb-1">🔑 Demo Credentials:</div>
-                <div className="grid grid-cols-2 gap-1 text-xs">
-                  <div className="bg-white/70 rounded px-1 py-1">
-                    <span className="text-gray-600">Admin:</span> <span className="font-mono text-[10px]">admin@eeu.gov.et</span>
-                  </div>
-                  <div className="bg-white/70 rounded px-1 py-1">
-                    <span className="text-gray-600">Pass:</span> <span className="font-mono text-[10px]">admin123</span>
-                  </div>
-                </div>
+              {/* Interactive Brand Elements */}
+              <div className="flex justify-center space-x-4">
+                <div className="w-2 h-2 bg-eeu-orange rounded-full"></div>
+                <div className="w-2 h-2 bg-eeu-green rounded-full"></div>
+                <div className="w-2 h-2 bg-eeu-orange rounded-full"></div>
+              </div>
+
+              {/* Professional Footer Message */}
+              <div className="text-center">
+                <p className="text-xs text-gray-600 font-medium">
+                  Authorized Personnel Only
+                </p>
+                <p className="text-xs text-eeu-green font-semibold mt-1">
+                  Ethiopian Electric Utility Staff Portal
+                </p>
               </div>
             </div>
 
           </CardContent>
         </Card>
 
-
-
-        <div className="mt-6 text-center space-y-4">
-          <p className="text-xs text-white/60">
-            System designed by <span className="font-medium text-white/80">Worku Mesafint Addis [504530]</span>
-          </p>
-          <p>© 2025 Ethiopian Electric Utility. All rights reserved.</p>
+        {/* Enhanced Footer Section */}
+        <div className="mt-8 text-center space-y-4">
+          {/* Professional System Info */}
+          <div className="bg-white/10 backdrop-blur-md rounded-xl px-6 py-4 border border-white/20 shadow-lg">
+            <div className="flex items-center justify-center space-x-3 mb-2">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="w-4 h-4 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full"></div>
+              </div>
+              <p className="text-sm text-white/90 font-semibold">
+                EEU Complaint Management System
+              </p>
+            </div>
+            <p className="text-xs text-white/70 font-medium">
+              System designed by <span className="text-white/90 font-semibold">Worku Mesafint Addis [504530]</span>
+            </p>
+          </div>
+          
+          {/* Copyright */}
+          <div className="text-center">
+            <p className="text-xs text-white/80 font-medium">© 2025 Ethiopian Electric Utility. All rights reserved.</p>
+            <div className="flex justify-center space-x-2 mt-2">
+              <div className="w-1 h-1 bg-white/60 rounded-full"></div>
+              <div className="w-1 h-1 bg-white/60 rounded-full"></div>
+              <div className="w-1 h-1 bg-white/60 rounded-full"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

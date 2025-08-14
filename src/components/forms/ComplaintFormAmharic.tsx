@@ -13,7 +13,8 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { COMPLAINT_CATEGORIES, ComplaintCategory, ComplaintPriority } from '@/types/complaint';
+import { ComplaintCategory, ComplaintPriority } from '@/types/complaint';
+import { COMPLAINT_CATEGORIES } from '@/lib/constants';
 import { ETHIOPIAN_REGIONS, SERVICE_CENTERS } from '@/types/user';
 import { apiService } from '@/lib/api';
 
@@ -104,12 +105,18 @@ export function ComplaintFormAmharic() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <form onSubmit={handleSubmit} className="animate-slide-up">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="border-eeu-orange shadow-lg hover:shadow-xl transition-shadow duration-300 bg-gradient-to-br from-white to-eeu-orange-light">
-            <CardHeader className="bg-gradient-eeu text-white rounded-t-lg">
-              <CardTitle>
-                የደንበኛ መረጃ
-              </CardTitle>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <Card className="shadow-xl bg-white rounded-xl border-2 border-green-200 hover:shadow-2xl transition-all duration-300">
+            <CardHeader className="bg-gradient-to-r from-green-600 via-yellow-400 to-green-600 text-white py-6 rounded-t-xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-green-600/90 via-yellow-400/90 to-green-600/90"></div>
+              <div className="relative z-10">
+                <CardTitle className="text-xl font-bold">
+                  የደንበኛ መረጃ
+                </CardTitle>
+                <p className="text-green-100 text-sm mt-2 font-medium">
+                  የግል እና የመገናኛ ዝርዝሮች
+                </p>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
