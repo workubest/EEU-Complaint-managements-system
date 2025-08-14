@@ -14,7 +14,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { COMPLAINT_CATEGORIES, ComplaintCategory, ComplaintPriority } from '@/types/complaint';
-import { Loader2, CheckCircle, AlertCircle, User, Building2 } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, User, Building2, Zap, Shield, Users, FileText, Clock } from 'lucide-react';
 
 // API integration
 import { apiService } from '@/lib/api';
@@ -386,7 +386,7 @@ export function CustomerPortal() {
             {/* Modern Title Section with EEU Brand Colors */}
             <div className="text-center space-y-4">
               <div className="relative">
-                <p className="text-2xl lg:text-3xl text-white font-bold drop-shadow-lg shadow-black/50 relative z-10">
+                <p className="text-2xl lg:text-3xl text-eeu-orange font-bold drop-shadow-lg shadow-black/50 relative z-10">
                   Ethiopian Electric Utility Service Portal
                 </p>
                 {/* Enhanced shadow effect */}
@@ -406,8 +406,8 @@ export function CustomerPortal() {
           {/* Modern Interactive Features with EEU Brand Colors */}
           <div className="flex flex-wrap justify-center gap-6 mb-8">
             <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-eeu-green rounded-full flex items-center justify-center shadow-md">
-                <Zap className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center shadow-md">
+                <Zap className="w-6 h-6 text-eeu-green" />
               </div>
               <div className="text-left">
                 <div className="text-lg font-bold text-eeu-green">24/7 Service</div>
@@ -416,8 +416,8 @@ export function CustomerPortal() {
             </div>
             
             <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-eeu-orange rounded-full flex items-center justify-center shadow-md">
-                <Shield className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center shadow-md">
+                <Shield className="w-6 h-6 text-eeu-orange" />
               </div>
               <div className="text-left">
                 <div className="text-lg font-bold text-eeu-orange">Secure Portal</div>
@@ -426,8 +426,8 @@ export function CustomerPortal() {
             </div>
             
             <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-eeu-green rounded-full flex items-center justify-center shadow-md">
-                <Users className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center shadow-md">
+                <Users className="w-6 h-6 text-eeu-green" />
               </div>
               <div className="text-left">
                 <div className="text-lg font-bold text-eeu-green">Customer Focus</div>
@@ -440,8 +440,8 @@ export function CustomerPortal() {
           <div className="bg-white rounded-2xl p-10 shadow-xl border-2 border-eeu-orange/20 max-w-4xl mx-auto mb-8 hover:shadow-2xl hover:border-eeu-orange transition-all duration-300">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mb-6">
-                <div className="w-16 h-16 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-lg">
-                  <Users className="w-8 h-8 text-white" />
+                <div className="w-16 h-16 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-lg">
+                  <Users className="w-8 h-8 text-eeu-orange" />
                 </div>
                 <h2 className="text-4xl font-bold text-eeu-green">
                   Welcome to Your Customer Portal
@@ -450,22 +450,22 @@ export function CustomerPortal() {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                    <FileText className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                    <FileText className="w-6 h-6 text-eeu-orange" />
                   </div>
                   <div className="font-bold text-eeu-orange text-lg">Submit</div>
                   <div className="text-gray-700 font-medium">Complaints</div>
                 </div>
                 <div className="text-center p-6 bg-gradient-to-br from-eeu-green/10 to-green-100/50 rounded-xl border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 bg-eeu-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                    <Clock className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                    <Clock className="w-6 h-6 text-eeu-green" />
                   </div>
                   <div className="font-bold text-eeu-green text-lg">Track</div>
                   <div className="text-gray-700 font-medium">Progress</div>
                 </div>
                 <div className="text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                    <Users className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                    <Users className="w-6 h-6 text-eeu-orange" />
                   </div>
                   <div className="font-bold text-eeu-orange text-lg">Manage</div>
                   <div className="text-gray-700 font-medium">Account</div>

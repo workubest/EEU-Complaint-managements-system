@@ -148,7 +148,7 @@ const LandingPage: React.FC = () => {
           {/* Modern Title Section with EEU Brand Colors */}
           <div className="space-y-6">
             <div className="relative">
-              <h1 className="text-5xl lg:text-6xl font-bold text-white drop-shadow-2xl shadow-black/50 relative z-10">
+              <h1 className="text-5xl lg:text-6xl font-bold text-eeu-orange drop-shadow-2xl shadow-black/50 relative z-10">
                 {t('login.title')}
               </h1>
               {/* Enhanced shadow effect */}
@@ -185,8 +185,8 @@ const LandingPage: React.FC = () => {
               onClick={() => navigate('/customer-portal')}
             >
               <CardHeader className="text-center pb-6 bg-gradient-to-br from-eeu-orange to-orange-600 text-white rounded-t-lg">
-                <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <FileText className="w-12 h-12 text-white" />
+                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <FileText className="w-12 h-12 text-eeu-orange" />
                 </div>
                 <div className="relative">
                   <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
@@ -204,26 +204,26 @@ const LandingPage: React.FC = () => {
                 </p>
                 <ul className="text-left space-y-4 mb-8">
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-green" />
                     </div>
                     {t('landing.feature.file_complaints')}
                   </li>
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-green" />
                     </div>
                     {t('landing.feature.track_status')}
                   </li>
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-green" />
                     </div>
                     {t('landing.feature.account_lookup')}
                   </li>
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-green" />
                     </div>
                     {t('landing.feature.multilingual')}
                   </li>
@@ -241,8 +241,8 @@ const LandingPage: React.FC = () => {
               onClick={() => navigate('/login')}
             >
               <CardHeader className="text-center pb-6 bg-gradient-to-br from-eeu-green to-green-600 text-white rounded-t-lg">
-                <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Shield className="w-12 h-12 text-white" />
+                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Shield className="w-12 h-12 text-eeu-green" />
                 </div>
                 <div className="relative">
                   <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
@@ -260,26 +260,26 @@ const LandingPage: React.FC = () => {
                 </p>
                 <ul className="text-left space-y-4 mb-8">
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-orange" />
                     </div>
                     {t('landing.feature.manage_complaints')}
                   </li>
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-orange" />
                     </div>
                     {t('landing.feature.analytics_reports')}
                   </li>
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-orange" />
                     </div>
                     {t('landing.feature.user_management')}
                   </li>
                   <li className="flex items-center text-gray-800 font-medium">
-                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
-                      <CheckCircle className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-eeu-orange" />
                     </div>
                     {t('landing.feature.role_permissions')}
                   </li>
@@ -308,8 +308,8 @@ const LandingPage: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center bg-white rounded-xl p-8 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl transition-all duration-300">
-              <div className="w-20 h-20 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Phone className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Phone className="w-10 h-10 text-eeu-orange" />
               </div>
               <h4 className="text-2xl font-bold text-eeu-orange mb-4">
                 {t('landing.contact.phone')}
@@ -319,8 +319,8 @@ const LandingPage: React.FC = () => {
             </div>
             
             <div className="text-center bg-white rounded-xl p-8 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
-              <div className="w-20 h-20 bg-eeu-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Mail className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 bg-eeu-green/10 border-2 border-eeu-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Mail className="w-10 h-10 text-eeu-green" />
               </div>
               <h4 className="text-2xl font-bold text-eeu-green mb-4">
                 {t('landing.contact.email')}
@@ -330,8 +330,8 @@ const LandingPage: React.FC = () => {
             </div>
             
             <div className="text-center bg-white rounded-xl p-8 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl transition-all duration-300">
-              <div className="w-20 h-20 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Clock className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 bg-eeu-orange/10 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Clock className="w-10 h-10 text-eeu-orange" />
               </div>
               <h4 className="text-2xl font-bold text-eeu-orange mb-4">
                 {t('landing.contact.hours')}
@@ -348,8 +348,8 @@ const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-8">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Zap className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Zap className="w-10 h-10 text-eeu-orange" />
               </div>
               <h4 className="text-2xl font-bold text-white mb-3 drop-shadow-lg">{t('login.title')}</h4>
               <p className="text-white/90 text-lg font-medium">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>

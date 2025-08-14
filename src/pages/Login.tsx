@@ -162,10 +162,10 @@ export function Login() {
                 <div className="absolute top-8 left-8 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '1s' }}></div>
               </div>
               
-              {/* Enhanced Title Section with White Text and Shadows */}
+              {/* Enhanced Title Section with EEU Brand Colors */}
               <div className="space-y-3 animate-fade-in">
                 <div className="relative">
-                  <h1 className="text-2xl lg:text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
+                  <h1 className="text-2xl lg:text-3xl font-bold text-eeu-orange drop-shadow-lg shadow-black/50 relative z-10">
                     Ethiopian Electric Utility
                   </h1>
                   {/* Enhanced shadow effect */}
@@ -173,10 +173,10 @@ export function Login() {
                     Ethiopian Electric Utility
                   </h1>
                 </div>
-                <p className="text-lg text-gray-700 font-medium">
+                <p className="text-lg text-eeu-green font-semibold">
                   የኢትዮጵያ ኤሌክትሪክ አገልግሎት
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-700 font-medium">
                   Staff Portal Access
                 </p>
               </div>
