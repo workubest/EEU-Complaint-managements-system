@@ -348,12 +348,16 @@ const LandingPage: React.FC = () => {
               <h4 className="text-2xl font-bold text-eeu-orange mb-3 drop-shadow-lg">{t('login.title')}</h4>
               <p className="text-eeu-green text-lg font-semibold">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>
             </div>
-            <div className="border-t border-gray-200 pt-8">
+            <div className="border-t border-gray-200 pt-8 space-y-4">
+              <div className="flex flex-col md:flex-row justify-center items-center gap-2 text-sm">
+                <span className="text-gray-600">System Designed by:</span>
+                <span className="font-semibold text-eeu-orange">WORKU MESAFINT ADDIS [504530]</span>
+              </div>
               <p className="text-gray-700 text-lg font-medium">
-                © 2024 {t('login.title')}. {t('landing.footer.rights')}
+                © 2025 Ethiopian Electric Utility. All rights reserved.
               </p>
               <p className="text-gray-600 mt-3 font-medium">
-                {t('landing.footer.version')} 1.0.0
+                Version 1.0.0
               </p>
             </div>
           </div>

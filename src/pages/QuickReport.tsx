@@ -21,6 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { format, subDays, subMonths, subWeeks } from 'date-fns';
 import { apiService } from '@/lib/api';
+import { Footer } from '@/components/layout/Footer';
 
 interface QuickReportTemplate {
   id: string;
@@ -369,6 +370,9 @@ export function QuickReport() {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

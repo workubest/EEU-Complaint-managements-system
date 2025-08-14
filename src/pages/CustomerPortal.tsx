@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { COMPLAINT_CATEGORIES, ComplaintCategory, ComplaintPriority } from '@/types/complaint';
 import { Loader2, CheckCircle, AlertCircle, User, Building2, Zap, Shield, Users, FileText, Clock } from 'lucide-react';
+import { Footer } from '@/components/layout/Footer';
 
 // API integration
 import { apiService } from '@/lib/api';
@@ -907,6 +908,9 @@ export function CustomerPortal() {
         <div className="absolute bottom-1/4 left-1/2 w-4 h-4 bg-purple-400/20 rounded-full animate-ping" style={{ animationDelay: '3s', animationDuration: '6s' }}></div>
       </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
