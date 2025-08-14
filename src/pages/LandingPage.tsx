@@ -145,11 +145,17 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Clean Title Section - No Text Shadows */}
+          {/* Enhanced Title Section with White Text and Shadows */}
           <div className="space-y-4">
-            <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-eeu bg-clip-text text-transparent animate-slide-up">
-              {t('login.title')}
-            </h1>
+            <div className="relative animate-slide-up">
+              <h1 className="text-5xl lg:text-6xl font-bold text-white drop-shadow-2xl shadow-black/50 relative z-10">
+                {t('login.title')}
+              </h1>
+              {/* Enhanced shadow effect */}
+              <h1 className="absolute inset-0 text-5xl lg:text-6xl font-bold text-black/30 blur-sm transform translate-x-1 translate-y-1">
+                {t('login.title')}
+              </h1>
+            </div>
             <p className="text-xl lg:text-2xl text-gray-700 font-medium animate-slide-up" style={{ animationDelay: '0.2s' }}>
               የኢትዮጵያ ኤሌክትሪክ አገልግሎት
             </p>
@@ -185,9 +191,15 @@ const LandingPage: React.FC = () => {
                 <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <FileText className="w-10 h-10 text-white" />
                 </div>
-                <CardTitle className="text-3xl font-bold text-gray-800 group-hover:text-eeu-orange transition-colors duration-300">
-                  {t('landing.customer_portal')}
-                </CardTitle>
+                <div className="relative">
+                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10 group-hover:text-white transition-colors duration-300">
+                    {t('landing.customer_portal')}
+                  </CardTitle>
+                  {/* Enhanced shadow effect */}
+                  <CardTitle className="absolute inset-0 text-3xl font-bold text-black/40 blur-sm transform translate-x-1 translate-y-1">
+                    {t('landing.customer_portal')}
+                  </CardTitle>
+                </div>
               </CardHeader>
               <CardContent className="text-center relative z-10">
                 <p className="text-gray-600 mb-6 text-lg">
@@ -238,9 +250,15 @@ const LandingPage: React.FC = () => {
                 <div className="w-20 h-20 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <Shield className="w-10 h-10 text-white" />
                 </div>
-                <CardTitle className="text-3xl font-bold text-gray-800 group-hover:text-eeu-green transition-colors duration-300">
-                  {t('landing.staff_portal')}
-                </CardTitle>
+                <div className="relative">
+                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10 group-hover:text-white transition-colors duration-300">
+                    {t('landing.staff_portal')}
+                  </CardTitle>
+                  {/* Enhanced shadow effect */}
+                  <CardTitle className="absolute inset-0 text-3xl font-bold text-black/40 blur-sm transform translate-x-1 translate-y-1">
+                    {t('landing.staff_portal')}
+                  </CardTitle>
+                </div>
               </CardHeader>
               <CardContent className="text-center relative z-10">
                 <p className="text-gray-600 mb-6 text-lg">

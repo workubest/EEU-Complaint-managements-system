@@ -162,11 +162,17 @@ export function Login() {
                 <div className="absolute top-8 left-8 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '1s' }}></div>
               </div>
               
-              {/* Clean Title Section - No Text Shadows */}
+              {/* Enhanced Title Section with White Text and Shadows */}
               <div className="space-y-3 animate-fade-in">
-                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-eeu bg-clip-text text-transparent">
-                  Ethiopian Electric Utility
-                </h1>
+                <div className="relative">
+                  <h1 className="text-2xl lg:text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
+                    Ethiopian Electric Utility
+                  </h1>
+                  {/* Enhanced shadow effect */}
+                  <h1 className="absolute inset-0 text-2xl lg:text-3xl font-bold text-black/40 blur-sm transform translate-x-1 translate-y-1">
+                    Ethiopian Electric Utility
+                  </h1>
+                </div>
                 <p className="text-lg text-gray-700 font-medium">
                   የኢትዮጵያ ኤሌክትሪክ አገልግሎት
                 </p>

@@ -383,11 +383,17 @@ export function CustomerPortal() {
               )}
             </div>
             
-            {/* Title Section Below Logo */}
+            {/* Enhanced Title Section with White Text and Shadows */}
             <div className="text-center space-y-3">
-              <p className="text-xl lg:text-2xl text-gray-700 font-semibold">
-                Ethiopian Electric Utility Service Portal
-              </p>
+              <div className="relative">
+                <p className="text-xl lg:text-2xl text-white font-bold drop-shadow-lg shadow-black/50 relative z-10">
+                  Ethiopian Electric Utility Service Portal
+                </p>
+                {/* Enhanced shadow effect */}
+                <p className="absolute inset-0 text-xl lg:text-2xl text-black/40 font-bold blur-sm transform translate-x-1 translate-y-1">
+                  Ethiopian Electric Utility Service Portal
+                </p>
+              </div>
               <p className="text-lg text-gray-600 font-medium">
                 የኢትዮጵያ ኤሌክትሪክ አገልግሎት
               </p>
