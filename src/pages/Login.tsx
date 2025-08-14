@@ -162,19 +162,16 @@ export function Login() {
                 <div className="absolute top-8 left-8 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '1s' }}></div>
               </div>
               
-              {/* Ethiopian Electric Utility Title - Close to Logo */}
-              <div className="relative inline-block animate-fade-in">
-                <div className="absolute inset-0 bg-gradient-eeu rounded-lg blur-md opacity-50"></div>
-                <h1 className="relative text-xl font-bold text-white px-4 py-2 bg-gradient-eeu rounded-lg shadow-xl drop-shadow-lg">
+              {/* Clean Title Section - No Text Shadows */}
+              <div className="space-y-3 animate-fade-in">
+                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-eeu bg-clip-text text-transparent">
                   Ethiopian Electric Utility
                 </h1>
-              </div>
-              
-              {/* Ethiopian Text */}
-              <div className="relative inline-block animate-slide-up delay-100">
-                <div className="absolute inset-0 bg-gradient-eeu rounded-lg blur-sm opacity-60"></div>
-                <p className="relative text-xs text-white font-semibold px-3 py-1 bg-gradient-eeu rounded-lg shadow-lg">
+                <p className="text-lg text-gray-700 font-medium">
                   የኢትዮጵያ ኤሌክትሪክ አገልግሎት
+                </p>
+                <p className="text-sm text-gray-600">
+                  Staff Portal Access
                 </p>
               </div>
             </div>

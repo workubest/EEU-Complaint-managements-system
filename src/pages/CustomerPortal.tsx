@@ -332,23 +332,23 @@ export function CustomerPortal() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <div className="max-w-6xl mx-auto space-y-8 p-6">
         {/* Enhanced Header */}
-        <div className="animate-fade-in text-center py-8">
-          {/* Enhanced Interactive Logo Section */}
-          <div className="flex flex-col items-center mb-8">
+        <div className="animate-fade-in text-center py-12">
+          {/* Centered Interactive Logo Section */}
+          <div className="flex flex-col items-center justify-center mb-12">
             <div 
-              className="w-64 h-64 lg:w-80 lg:h-80 flex items-center justify-center group cursor-pointer relative mb-6"
+              className="w-80 h-80 lg:w-96 lg:h-96 flex items-center justify-center group cursor-pointer relative mx-auto mb-8"
               onClick={handleInteractiveClick}
               onMouseEnter={() => setIsLogoHovered(true)}
               onMouseLeave={() => setIsLogoHovered(false)}
             >
               {/* Enhanced Glow Effects */}
               <div className={`absolute inset-0 bg-gradient-eeu rounded-full blur-3xl opacity-30 group-hover:opacity-60 transition-all duration-700 ${isLogoHovered ? 'animate-pulse-glow' : 'animate-pulse'}`}></div>
-              <div className="absolute inset-4 bg-gradient-eeu-reverse rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
+              <div className="absolute inset-6 bg-gradient-eeu-reverse rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
               
               <img 
                 src="/eeu-logo-new.png" 
                 alt="Ethiopian Electric Utility Logo" 
-                className={`w-full h-full object-contain transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 drop-shadow-2xl relative z-10 ${isLogoHovered ? 'animate-float' : ''}`}
+                className={`w-full h-full object-contain transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 relative z-10 ${isLogoHovered ? 'animate-float' : ''}`}
               />
               
               {/* Multiple Rotating Rings */}
