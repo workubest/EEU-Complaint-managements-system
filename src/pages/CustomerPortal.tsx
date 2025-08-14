@@ -578,17 +578,25 @@ export function CustomerPortal() {
 
             {/* Enhanced Quick Access Cards - Second */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden">
+              <div className="group bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-3 relative overflow-hidden hover:bg-white">
                 {/* Animated Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-eeu-orange/10 to-eeu-orange/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="absolute top-0 right-0 w-20 h-20 bg-eeu-orange/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
                 
                 <div className="relative z-10 text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-eeu-orange/50">
-                    <FileText className="w-8 h-8 text-white" />
+                  {/* Enhanced Icon Container */}
+                  <div className="relative w-24 h-24 mx-auto group-hover:scale-125 transition-all duration-500">
+                    {/* Outer glow ring */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange to-orange-600 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
+                    {/* Main icon background */}
+                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-orange via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-eeu-orange/60 transition-all duration-500">
+                      <FileText className="w-10 h-10 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                    </div>
+                    {/* Rotating accent ring */}
+                    <div className="absolute inset-0 border-2 border-eeu-orange/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
                   </div>
                   <h3 className="font-bold text-xl text-eeu-green group-hover:text-eeu-orange transition-colors duration-300">Submit Complaint</h3>
-                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors">Report service issues or concerns quickly and easily</p>
+                  <p className="text-gray-700 group-hover:text-eeu-green transition-colors font-medium">Report service issues or concerns quickly and easily</p>
                   
                   {/* Interactive Elements */}
                   <div className="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -598,22 +606,41 @@ export function CustomerPortal() {
                   </div>
                   
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-eeu-orange font-semibold">Click to start →</span>
+                    <span className="text-eeu-orange font-semibold flex items-center justify-center">
+                      Click to start 
+                      <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </span>
+                  </div>
+                  
+                  {/* Sparkle Effects */}
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    <div className="w-1 h-1 bg-eeu-orange rounded-full animate-ping"></div>
+                  </div>
+                  <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ animationDelay: '0.3s' }}>
+                    <div className="w-1 h-1 bg-eeu-orange rounded-full animate-ping"></div>
                   </div>
                 </div>
               </div>
               
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden">
+              <div className="group bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-3 relative overflow-hidden hover:bg-white">
                 {/* Animated Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-eeu-green/10 to-eeu-green/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="absolute top-0 right-0 w-20 h-20 bg-eeu-green/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
                 
                 <div className="relative z-10 text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-eeu-green/50">
-                    <Clock className="w-8 h-8 text-white" />
+                  {/* Enhanced Icon Container */}
+                  <div className="relative w-24 h-24 mx-auto group-hover:scale-125 transition-all duration-500">
+                    {/* Outer glow ring */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-green to-green-600 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
+                    {/* Main icon background */}
+                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-green via-green-500 to-green-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-eeu-green/60 transition-all duration-500">
+                      <Clock className="w-10 h-10 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                    </div>
+                    {/* Rotating accent ring */}
+                    <div className="absolute inset-0 border-2 border-eeu-green/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
                   </div>
                   <h3 className="font-bold text-xl text-eeu-orange group-hover:text-eeu-green transition-colors duration-300">Track Status</h3>
-                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors">Monitor your complaint progress in real-time</p>
+                  <p className="text-gray-700 group-hover:text-eeu-orange transition-colors font-medium">Monitor your complaint progress in real-time</p>
                   
                   {/* Interactive Elements */}
                   <div className="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -623,22 +650,41 @@ export function CustomerPortal() {
                   </div>
                   
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-eeu-green font-semibold">Coming soon →</span>
+                    <span className="text-eeu-green font-semibold flex items-center justify-center">
+                      Coming soon 
+                      <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </span>
+                  </div>
+                  
+                  {/* Sparkle Effects */}
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    <div className="w-1 h-1 bg-eeu-green rounded-full animate-ping"></div>
+                  </div>
+                  <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ animationDelay: '0.3s' }}>
+                    <div className="w-1 h-1 bg-eeu-green rounded-full animate-ping"></div>
                   </div>
                 </div>
               </div>
               
-              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden">
+              <div className="group bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-3 relative overflow-hidden hover:bg-white">
                 {/* Animated Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-eeu-orange/10 to-eeu-orange/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="absolute top-0 right-0 w-20 h-20 bg-eeu-orange/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
                 
                 <div className="relative z-10 text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-eeu-orange/50">
-                    <Users className="w-8 h-8 text-white" />
+                  {/* Enhanced Icon Container */}
+                  <div className="relative w-24 h-24 mx-auto group-hover:scale-125 transition-all duration-500">
+                    {/* Outer glow ring */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange to-orange-600 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 animate-pulse"></div>
+                    {/* Main icon background */}
+                    <div className="absolute inset-2 bg-gradient-to-br from-eeu-orange via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-eeu-orange/60 transition-all duration-500">
+                      <Users className="w-10 h-10 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
+                    </div>
+                    {/* Rotating accent ring */}
+                    <div className="absolute inset-0 border-2 border-eeu-orange/30 rounded-full group-hover:rotate-180 transition-transform duration-1000"></div>
                   </div>
                   <h3 className="font-bold text-xl text-eeu-green group-hover:text-eeu-orange transition-colors duration-300">Get Support</h3>
-                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors">Access customer service help and assistance</p>
+                  <p className="text-gray-700 group-hover:text-eeu-green transition-colors font-medium">Access customer service help and assistance</p>
                   
                   {/* Interactive Elements */}
                   <div className="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -648,7 +694,18 @@ export function CustomerPortal() {
                   </div>
                   
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-eeu-orange font-semibold">Contact us →</span>
+                    <span className="text-eeu-orange font-semibold flex items-center justify-center">
+                      Contact us 
+                      <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </span>
+                  </div>
+                  
+                  {/* Sparkle Effects */}
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    <div className="w-1 h-1 bg-eeu-orange rounded-full animate-ping"></div>
+                  </div>
+                  <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ animationDelay: '0.3s' }}>
+                    <div className="w-1 h-1 bg-eeu-orange rounded-full animate-ping"></div>
                   </div>
                 </div>
               </div>
@@ -927,12 +984,19 @@ export function CustomerPortal() {
         </div>
       )}
 
-      {/* Interactive Background Particles */}
+      {/* Enhanced Interactive Background Particles */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400/30 rounded-full animate-ping" style={{ animationDelay: '0s', animationDuration: '3s' }}></div>
-        <div className="absolute top-3/4 right-1/4 w-3 h-3 bg-green-400/30 rounded-full animate-ping" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
-        <div className="absolute top-1/2 left-3/4 w-2 h-2 bg-orange-400/30 rounded-full animate-ping" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
-        <div className="absolute bottom-1/4 left-1/2 w-4 h-4 bg-purple-400/20 rounded-full animate-ping" style={{ animationDelay: '3s', animationDuration: '6s' }}></div>
+        {/* EEU Brand Colored Particles */}
+        <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-eeu-orange/20 rounded-full animate-ping" style={{ animationDelay: '0s', animationDuration: '3s' }}></div>
+        <div className="absolute top-3/4 right-1/4 w-4 h-4 bg-eeu-green/25 rounded-full animate-ping" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+        <div className="absolute top-1/2 left-3/4 w-2 h-2 bg-eeu-orange/30 rounded-full animate-ping" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
+        <div className="absolute bottom-1/4 left-1/2 w-5 h-5 bg-eeu-green/15 rounded-full animate-ping" style={{ animationDelay: '3s', animationDuration: '6s' }}></div>
+        <div className="absolute top-1/6 right-1/3 w-2 h-2 bg-eeu-orange/25 rounded-full animate-ping" style={{ animationDelay: '4s', animationDuration: '7s' }}></div>
+        <div className="absolute bottom-1/3 left-1/6 w-3 h-3 bg-eeu-green/20 rounded-full animate-ping" style={{ animationDelay: '5s', animationDuration: '8s' }}></div>
+        
+        {/* Floating EEU Brand Elements */}
+        <div className="absolute top-1/3 right-1/6 w-6 h-6 border border-eeu-orange/10 rounded-full animate-pulse" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+        <div className="absolute bottom-1/6 right-1/2 w-4 h-4 border border-eeu-green/15 rounded-full animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
       </div>
       </div>
       
