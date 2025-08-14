@@ -330,8 +330,15 @@ export function CustomerPortal() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      <div className="max-w-6xl mx-auto space-y-8 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-eeu-green/5 via-white to-eeu-orange/5 relative overflow-hidden">
+      {/* Enhanced Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-eeu-orange rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-eeu-green rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full blur-2xl"></div>
+      </div>
+      
+      <div className="relative z-10 max-w-6xl mx-auto space-y-8 p-6">
         {/* Enhanced Header */}
         <div className="animate-fade-in text-center py-12">
           {/* Centered Interactive Logo Section */}
@@ -509,20 +516,20 @@ export function CustomerPortal() {
               
               <CardContent className="space-y-8 pt-8 pb-8">
                 <div className="text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto">
-                    <AlertCircle className="h-10 w-10 text-blue-600" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange/20 to-eeu-orange/40 border-2 border-eeu-orange rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <AlertCircle className="h-10 w-10 text-eeu-orange" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800">
+                  <h3 className="text-2xl font-bold text-eeu-green">
                     Enter Your Account Number
                   </h3>
-                  <p className="text-gray-600 max-w-lg mx-auto text-lg leading-relaxed">
+                  <p className="text-gray-700 max-w-lg mx-auto text-lg leading-relaxed">
                     Please enter your electric service account number to access your customer portal and submit complaints.
                   </p>
                 </div>
 
                 <form onSubmit={handleAccountValidation} className="space-y-6 max-w-lg mx-auto">
                   <div className="space-y-3">
-                    <Label htmlFor="accountNumber" className="text-lg font-semibold text-gray-700">
+                    <Label htmlFor="accountNumber" className="text-lg font-semibold text-eeu-green">
                       Account Number *
                     </Label>
                     <div className="relative">
@@ -532,16 +539,17 @@ export function CustomerPortal() {
                         value={accountNumber}
                         onChange={(e) => setAccountNumber(e.target.value)}
                         placeholder="Enter your account number"
-                        className="text-xl py-4 px-6 border-2 border-gray-200 focus:border-eeu-green transition-all duration-300 rounded-xl shadow-sm hover:shadow-md text-center font-mono"
+                        className="text-xl py-4 px-6 border-2 border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300 rounded-xl shadow-sm hover:shadow-md text-center font-mono"
                         required
                       />
                       <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                        <span className="text-gray-400">🔢</span>
+                        <span className="text-eeu-orange">🔢</span>
                       </div>
                     </div>
-                    <div className="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-400">
-                      <p className="text-sm text-blue-700 font-medium">
-                        💡 You can find your account number on your electricity bill
+                    <div className="bg-eeu-green/10 rounded-lg p-4 border-l-4 border-eeu-green">
+                      <p className="text-sm text-eeu-green font-medium flex items-center">
+                        <span className="mr-2">💡</span>
+                        You can find your account number on your electricity bill
                       </p>
                     </div>
                   </div>
@@ -549,16 +557,16 @@ export function CustomerPortal() {
                   <Button
                     type="submit"
                     disabled={isValidating || !accountNumber.trim()}
-                    className="w-full py-4 text-lg bg-gradient-eeu-reverse hover:opacity-90 transition-all duration-300 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="w-full py-4 text-lg bg-gradient-to-r from-eeu-green to-eeu-orange hover:from-eeu-green/90 hover:to-eeu-orange/90 text-white font-semibold transition-all duration-300 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     {isValidating ? (
                       <div className="flex items-center justify-center space-x-3">
-                        <Loader2 className="h-6 w-6 animate-spin" />
+                        <Loader2 className="h-6 w-6 animate-spin text-white" />
                         <span>Validating Account...</span>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center space-x-3">
-                        <span className="text-xl">🔍</span>
+                        <CheckCircle className="w-5 h-5" />
                         <span>Validate Account</span>
                         <span className="text-xl">→</span>
                       </div>
@@ -570,77 +578,77 @@ export function CustomerPortal() {
 
             {/* Enhanced Quick Access Cards - Second */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-110 hover:-translate-y-4 relative overflow-hidden">
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden">
                 {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute top-0 right-0 w-20 h-20 bg-blue-200/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-eeu-orange/10 to-eeu-orange/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute top-0 right-0 w-20 h-20 bg-eeu-orange/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
                 
                 <div className="relative z-10 text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-blue-500/50">
-                    <span className="text-3xl text-white">📋</span>
+                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-eeu-orange/50">
+                    <FileText className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="font-bold text-xl text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Submit Complaint</h3>
+                  <h3 className="font-bold text-xl text-eeu-green group-hover:text-eeu-orange transition-colors duration-300">Submit Complaint</h3>
                   <p className="text-gray-600 group-hover:text-gray-700 transition-colors">Report service issues or concerns quickly and easily</p>
                   
                   {/* Interactive Elements */}
                   <div className="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="w-2 h-2 bg-eeu-orange rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-eeu-green rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-eeu-orange rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                   
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-blue-600 font-semibold">Click to start →</span>
+                    <span className="text-eeu-orange font-semibold">Click to start →</span>
                   </div>
                 </div>
               </div>
               
-              <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-110 hover:-translate-y-4 relative overflow-hidden">
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden">
                 {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-green-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute top-0 right-0 w-20 h-20 bg-green-200/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-eeu-green/10 to-eeu-green/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute top-0 right-0 w-20 h-20 bg-eeu-green/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
                 
                 <div className="relative z-10 text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-green-500/50">
-                    <span className="text-3xl text-white">📊</span>
+                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-eeu-green/50">
+                    <Clock className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="font-bold text-xl text-gray-800 group-hover:text-green-600 transition-colors duration-300">Track Status</h3>
+                  <h3 className="font-bold text-xl text-eeu-orange group-hover:text-eeu-green transition-colors duration-300">Track Status</h3>
                   <p className="text-gray-600 group-hover:text-gray-700 transition-colors">Monitor your complaint progress in real-time</p>
                   
                   {/* Interactive Elements */}
                   <div className="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="w-2 h-2 bg-eeu-green rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-eeu-orange rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-eeu-green rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                   
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-green-600 font-semibold">Coming soon →</span>
+                    <span className="text-eeu-green font-semibold">Coming soon →</span>
                   </div>
                 </div>
               </div>
               
-              <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-110 hover:-translate-y-4 relative overflow-hidden">
+              <div className="group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden">
                 {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-orange-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute top-0 right-0 w-20 h-20 bg-orange-200/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-eeu-orange/10 to-eeu-orange/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute top-0 right-0 w-20 h-20 bg-eeu-orange/20 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
                 
                 <div className="relative z-10 text-center space-y-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-orange-500/50">
-                    <span className="text-3xl text-white">💬</span>
+                  <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-lg group-hover:shadow-eeu-orange/50">
+                    <Users className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="font-bold text-xl text-gray-800 group-hover:text-orange-600 transition-colors duration-300">Get Support</h3>
+                  <h3 className="font-bold text-xl text-eeu-green group-hover:text-eeu-orange transition-colors duration-300">Get Support</h3>
                   <p className="text-gray-600 group-hover:text-gray-700 transition-colors">Access customer service help and assistance</p>
                   
                   {/* Interactive Elements */}
                   <div className="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="w-2 h-2 bg-eeu-orange rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-eeu-green rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-eeu-orange rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                   
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-orange-600 font-semibold">Contact us →</span>
+                    <span className="text-eeu-orange font-semibold">Contact us →</span>
                   </div>
                 </div>
               </div>
@@ -657,88 +665,94 @@ export function CustomerPortal() {
           {renderCustomerInfo()}
 
           {/* Complaint Form */}
-          <Card className="border-border shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <CardHeader className="bg-gradient-eeu-reverse text-white rounded-t-lg">
-              <CardTitle className="flex items-center space-x-2">
-                <span className="text-xl">⚡</span>
-                <span>{t("form.complaint_details")}</span>
+          <Card className="border-2 border-eeu-orange/20 shadow-xl hover:shadow-2xl hover:border-eeu-orange transition-all duration-300">
+            <CardHeader className="bg-gradient-to-r from-eeu-green to-eeu-orange text-white rounded-t-lg relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+              <CardTitle className="flex items-center space-x-3 relative z-10">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xl">{t("form.complaint_details")}</span>
               </CardTitle>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
             </CardHeader>
             <CardContent className="space-y-6 pt-6">
               <form onSubmit={handleComplaintSubmission} className="space-y-4">
                 {/* Customer Information Section */}
-                <div className="bg-gradient-eeu-light rounded-lg p-4 border border-eeu-orange">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-                    <span className="mr-2">👤</span>
+                <div className="bg-gradient-to-r from-eeu-green/10 to-eeu-orange/10 rounded-xl p-6 border-2 border-eeu-orange/20">
+                  <h3 className="text-lg font-semibold text-eeu-green mb-4 flex items-center">
+                    <div className="w-8 h-8 bg-eeu-orange/20 border border-eeu-orange rounded-full flex items-center justify-center mr-3">
+                      <User className="w-4 h-4 text-eeu-orange" />
+                    </div>
                     {t("form.customer_information")}
-                    <span className="ml-2 text-xs bg-eeu-orange-light text-eeu-orange px-2 py-1 rounded-full">
+                    <span className="ml-3 text-xs bg-eeu-green/20 text-eeu-green px-3 py-1 rounded-full border border-eeu-green/30">
                       Auto-filled
                     </span>
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Customer Name */}
                     <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="customerName">{t("complaint.customer_name")} *</Label>
+                      <Label htmlFor="customerName" className="text-eeu-green font-semibold">{t("complaint.customer_name")} *</Label>
                       <Input
                         id="customerName"
                         value={customerData?.data['Full Name'] || customerData?.data['Company Name'] || ''}
                         readOnly
-                        className="bg-white border-gray-300"
+                        className="bg-eeu-green/5 border-eeu-green/30 text-gray-700 font-medium"
                       />
                     </div>
 
                     {/* Account Number */}
                     <div className="space-y-2">
-                      <Label htmlFor="accountNumber">{t("complaint.account_number")}</Label>
+                      <Label htmlFor="accountNumber" className="text-eeu-green font-semibold">{t("complaint.account_number")}</Label>
                       <Input
                         id="accountNumber"
                         value={customerData?.data['Contract Account'] || customerData?.data['Business Partner ID'] || accountNumber}
                         readOnly
-                        className="bg-white border-gray-300"
+                        className="bg-eeu-green/5 border-eeu-green/30 text-gray-700 font-medium"
                       />
                     </div>
 
                     {/* Email */}
                     <div className="space-y-2">
-                      <Label htmlFor="customerEmail">{t("complaint.customer_email")}</Label>
+                      <Label htmlFor="customerEmail" className="text-eeu-green font-semibold">{t("complaint.customer_email")}</Label>
                       <Input
                         id="customerEmail"
                         value={customerData?.data['Email'] || ''}
                         readOnly
-                        className="bg-white border-gray-300"
+                        className="bg-eeu-green/5 border-eeu-green/30 text-gray-700 font-medium"
                       />
                     </div>
 
                     {/* Phone Number */}
                     <div className="space-y-2">
-                      <Label htmlFor="customerPhone">{t("complaint.customer_phone")} *</Label>
+                      <Label htmlFor="customerPhone" className="text-eeu-green font-semibold">{t("complaint.customer_phone")} *</Label>
                       <Input
                         id="customerPhone"
                         value={customerData?.data['Phone'] || ''}
                         readOnly
-                        className="bg-white border-gray-300"
+                        className="bg-eeu-green/5 border-eeu-green/30 text-gray-700 font-medium"
                       />
                     </div>
 
                     {/* Region */}
                     <div className="space-y-2">
-                      <Label htmlFor="region">{t("complaint.region")}</Label>
+                      <Label htmlFor="region" className="text-eeu-green font-semibold">{t("complaint.region")}</Label>
                       <Input
                         id="region"
                         value={customerData?.data['Region'] || ''}
                         readOnly
-                        className="bg-white border-gray-300"
+                        className="bg-eeu-green/5 border-eeu-green/30 text-gray-700 font-medium"
                       />
                     </div>
 
                     {/* Address */}
                     <div className="space-y-2 md:col-span-3">
-                      <Label htmlFor="customerAddress">{t("complaint.customer_address")} *</Label>
+                      <Label htmlFor="customerAddress" className="text-eeu-green font-semibold">{t("complaint.customer_address")} *</Label>
                       <Input
                         id="customerAddress"
                         value={customerData?.data['Address'] || ''}
                         readOnly
-                        className="bg-white border-gray-300"
+                        className="bg-eeu-green/5 border-eeu-green/30 text-gray-700 font-medium"
                       />
                     </div>
                   </div>
@@ -746,24 +760,31 @@ export function CustomerPortal() {
 
                 {/* Complaint Title */}
                 <div className="space-y-2">
-                  <Label htmlFor="title">{t("form.complaint_title")} *</Label>
+                  <Label htmlFor="title" className="text-eeu-orange font-semibold flex items-center">
+                    <FileText className="w-4 h-4 mr-2 text-eeu-orange" />
+                    {t("form.complaint_title")} *
+                  </Label>
                   <Input
                     id="title"
                     value={complaintData.title}
                     onChange={(e) => handleComplaintInputChange('title', e.target.value)}
                     placeholder={t("form.brief_description")}
+                    className="border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300"
                     required
                   />
                 </div>
 
                 {/* Category */}
                 <div className="space-y-2">
-                  <Label htmlFor="category">{t("form.category")} *</Label>
+                  <Label htmlFor="category" className="text-eeu-orange font-semibold flex items-center">
+                    <Building2 className="w-4 h-4 mr-2 text-eeu-orange" />
+                    {t("form.category")} *
+                  </Label>
                   <Select 
                     value={complaintData.category} 
                     onValueChange={(value: ComplaintCategory) => handleComplaintInputChange('category', value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300">
                       <SelectValue placeholder={t("form.select_complaint_category")} />
                     </SelectTrigger>
                     <SelectContent className="max-h-80">
@@ -789,12 +810,15 @@ export function CustomerPortal() {
 
                 {/* Priority */}
                 <div className="space-y-2">
-                  <Label htmlFor="priority">{t("form.priority")} *</Label>
+                  <Label htmlFor="priority" className="text-eeu-orange font-semibold flex items-center">
+                    <AlertCircle className="w-4 h-4 mr-2 text-eeu-orange" />
+                    {t("form.priority")} *
+                  </Label>
                   <Select 
                     value={complaintData.priority} 
                     onValueChange={(value: ComplaintPriority) => handleComplaintInputChange('priority', value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300">
                       <SelectValue placeholder={t("form.select_priority_level")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -817,13 +841,16 @@ export function CustomerPortal() {
 
                 {/* Description */}
                 <div className="space-y-2">
-                  <Label htmlFor="description">{t("form.detailed_description")} *</Label>
+                  <Label htmlFor="description" className="text-eeu-orange font-semibold flex items-center">
+                    <FileText className="w-4 h-4 mr-2 text-eeu-orange" />
+                    {t("form.detailed_description")} *
+                  </Label>
                   <Textarea
                     id="description"
                     value={complaintData.description}
                     onChange={(e) => handleComplaintInputChange('description', e.target.value)}
                     placeholder={t("complaint.description_placeholder")}
-                    className="min-h-[120px]"
+                    className="min-h-[120px] border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300"
                     required
                   />
                 </div>
@@ -838,14 +865,14 @@ export function CustomerPortal() {
                       setCustomerData(null);
                       setAccountNumber('');
                     }}
-                    className="flex-1"
+                    className="flex-1 border-eeu-green text-eeu-green hover:bg-eeu-green hover:text-white transition-all duration-300"
                   >
                     {t("common.back")}
                   </Button>
                   
                   <Button
                     type="submit"
-                    className="flex-1 bg-gradient-eeu-reverse hover:opacity-90 transition-opacity"
+                    className="flex-1 bg-gradient-to-r from-eeu-green to-eeu-orange hover:from-eeu-green/90 hover:to-eeu-orange/90 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -877,14 +904,14 @@ export function CustomerPortal() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               handleInteractiveClick({ currentTarget: { getBoundingClientRect: () => ({ left: 0, top: 0 }) }, clientX: 50, clientY: 50 } as any);
             }}
-            className="group w-16 h-16 bg-gradient-eeu rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-12 animate-bounce relative overflow-hidden"
+            className="group w-16 h-16 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-12 animate-bounce relative overflow-hidden"
           >
             {/* Background Animation */}
             <div className="absolute inset-0 bg-white/20 rounded-full group-hover:bg-white/30 transition-colors duration-300"></div>
             
             {/* Icon */}
             <div className="relative z-10 flex items-center justify-center h-full">
-              <span className="text-white text-2xl group-hover:animate-wiggle">🚀</span>
+              <Zap className="w-6 h-6 text-white group-hover:animate-pulse" />
             </div>
             
             {/* Ripple Effect */}
@@ -892,7 +919,7 @@ export function CustomerPortal() {
             
             {/* Tooltip */}
             <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div className="bg-white border-2 border-eeu-green text-eeu-green px-3 py-1 rounded-lg text-sm whitespace-nowrap shadow-lg">
+              <div className="bg-white border-2 border-eeu-orange text-eeu-orange px-3 py-1 rounded-lg text-sm whitespace-nowrap shadow-lg font-semibold">
                 Back to top ⬆️
               </div>
             </div>
