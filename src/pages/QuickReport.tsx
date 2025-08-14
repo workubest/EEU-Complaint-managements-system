@@ -223,8 +223,15 @@ export function QuickReport() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-eeu-green/5 via-white to-eeu-orange/5 p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+      {/* Enhanced Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-eeu-orange rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-eeu-green rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-eeu-green to-eeu-orange rounded-full blur-2xl"></div>
+      </div>
+      
+      <div className="relative z-10 max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 animate-fade-in">
           <div className="flex items-center space-x-4">
@@ -232,21 +239,21 @@ export function QuickReport() {
               variant="outline" 
               size="sm"
               onClick={() => navigate(-1)}
-              className="shrink-0"
+              className="shrink-0 border-eeu-green text-eeu-green hover:bg-eeu-green hover:text-white transition-all duration-300"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>
             <div>
               <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-green-500">
+                <div className="p-3 rounded-xl bg-gradient-to-r from-eeu-green to-eeu-orange shadow-lg">
                   <Zap className="h-6 w-6 text-white" />
                 </div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary drop-shadow-sm tracking-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-eeu-green drop-shadow-sm tracking-tight">
                   Quick Reports
                 </h1>
               </div>
-              <p className="text-base sm:text-lg text-muted-foreground mt-2 max-w-2xl">
+              <p className="text-base sm:text-lg text-gray-700 mt-2 max-w-2xl font-medium">
                 Generate instant reports with pre-configured templates
               </p>
             </div>
@@ -254,7 +261,7 @@ export function QuickReport() {
           
           <div className="flex items-center space-x-3">
             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-40 border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -265,7 +272,7 @@ export function QuickReport() {
                 <SelectItem value="last_month">Last Month</SelectItem>
               </SelectContent>
             </Select>
-            <Badge variant="outline" className="text-sm">
+            <Badge variant="outline" className="text-sm border-eeu-green text-eeu-green bg-eeu-green/10">
               Period: {getPeriodLabel(selectedPeriod)}
             </Badge>
           </div>
@@ -280,17 +287,17 @@ export function QuickReport() {
             return (
               <Card 
                 key={template.id}
-                className="border-border hover:shadow-elevated transition-all duration-300 animate-scale-in cursor-pointer group"
+                className="border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-2xl transition-all duration-300 animate-scale-in cursor-pointer group bg-white/90 backdrop-blur-sm"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className={`p-3 rounded-lg ${template.color} group-hover:scale-110 transition-transform duration-200`}>
+                      <div className="p-3 rounded-lg bg-gradient-to-r from-eeu-green to-eeu-orange group-hover:scale-110 transition-transform duration-200 shadow-lg">
                         <Icon className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                        <CardTitle className="text-lg text-eeu-green group-hover:text-eeu-orange transition-colors">
                           {template.title}
                         </CardTitle>
                         <p className="text-sm text-muted-foreground mt-1">
@@ -311,7 +318,7 @@ export function QuickReport() {
                     <Button 
                       onClick={() => generateQuickReport(template)}
                       disabled={isGenerating}
-                      className="w-full group-hover:bg-primary/90 transition-colors"
+                      className="w-full bg-gradient-to-r from-eeu-green to-eeu-orange hover:from-eeu-green/90 hover:to-eeu-orange/90 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       {isGenerating ? (
                         <>
@@ -333,9 +340,9 @@ export function QuickReport() {
         </div>
 
         {/* Quick Actions */}
-        <Card className="animate-slide-up">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
+        <Card className="animate-slide-up border-2 border-eeu-green/20 bg-white/90 backdrop-blur-sm">
+          <CardHeader className="bg-gradient-to-r from-eeu-green/10 to-eeu-orange/10 rounded-t-lg">
+            <CardTitle className="flex items-center space-x-2 text-eeu-green">
               <FileText className="h-5 w-5" />
               <span>Need More Options?</span>
             </CardTitle>
@@ -345,7 +352,7 @@ export function QuickReport() {
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/dashboard/reports')}
-                className="flex-1 sm:flex-none"
+                className="flex-1 sm:flex-none border-eeu-orange text-eeu-orange hover:bg-eeu-orange hover:text-white transition-all duration-300"
               >
                 <BarChart3 className="mr-2 h-4 w-4" />
                 Advanced Reports
@@ -353,7 +360,7 @@ export function QuickReport() {
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/dashboard/analytics')}
-                className="flex-1 sm:flex-none"
+                className="flex-1 sm:flex-none border-eeu-green text-eeu-green hover:bg-eeu-green hover:text-white transition-all duration-300"
               >
                 <TrendingUp className="mr-2 h-4 w-4" />
                 Analytics Dashboard
@@ -361,7 +368,7 @@ export function QuickReport() {
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/dashboard/complaints')}
-                className="flex-1 sm:flex-none"
+                className="flex-1 sm:flex-none border-eeu-orange text-eeu-orange hover:bg-eeu-orange hover:text-white transition-all duration-300"
               >
                 <FileText className="mr-2 h-4 w-4" />
                 View Complaints
