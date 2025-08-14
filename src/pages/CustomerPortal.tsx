@@ -383,90 +383,92 @@ export function CustomerPortal() {
               )}
             </div>
             
-            {/* Enhanced Title Section with White Text and Shadows */}
-            <div className="text-center space-y-3">
+            {/* Modern Title Section with EEU Brand Colors */}
+            <div className="text-center space-y-4">
               <div className="relative">
-                <p className="text-xl lg:text-2xl text-white font-bold drop-shadow-lg shadow-black/50 relative z-10">
+                <p className="text-2xl lg:text-3xl text-white font-bold drop-shadow-lg shadow-black/50 relative z-10">
                   Ethiopian Electric Utility Service Portal
                 </p>
                 {/* Enhanced shadow effect */}
-                <p className="absolute inset-0 text-xl lg:text-2xl text-black/40 font-bold blur-sm transform translate-x-1 translate-y-1">
+                <p className="absolute inset-0 text-2xl lg:text-3xl text-black/40 font-bold blur-sm transform translate-x-1 translate-y-1">
                   Ethiopian Electric Utility Service Portal
                 </p>
               </div>
-              <p className="text-lg text-gray-600 font-medium">
+              <p className="text-xl text-eeu-green font-bold">
                 የኢትዮጵያ ኤሌክትሪክ አገልግሎት
+              </p>
+              <p className="text-lg text-eeu-orange font-semibold">
+                Customer Service Portal
               </p>
             </div>
           </div>
 
-          {/* Enhanced Interactive Features */}
+          {/* Modern Interactive Features with EEU Brand Colors */}
           <div className="flex flex-wrap justify-center gap-6 mb-8">
-            <div className="group flex items-center space-x-3 bg-white/90 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-110 hover:-translate-y-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                <span className="text-white text-lg">⚡</span>
+            <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 bg-eeu-green rounded-full flex items-center justify-center shadow-md">
+                <Zap className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-sm font-bold text-gray-800 group-hover:text-green-600 transition-colors">24/7 Service</div>
-                <div className="text-xs text-gray-500">Always Available</div>
+                <div className="text-lg font-bold text-eeu-green">24/7 Service</div>
+                <div className="text-sm text-gray-600 font-medium">Always Available</div>
               </div>
-              <div className="w-2 h-2 bg-green-400 rounded-full opacity-0 group-hover:opacity-100 animate-pulse transition-opacity"></div>
             </div>
             
-            <div className="group flex items-center space-x-3 bg-white/90 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-110 hover:-translate-y-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                <span className="text-white text-lg">🔒</span>
+            <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 bg-eeu-orange rounded-full flex items-center justify-center shadow-md">
+                <Shield className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors">Secure Portal</div>
-                <div className="text-xs text-gray-500">Protected Data</div>
+                <div className="text-lg font-bold text-eeu-orange">Secure Portal</div>
+                <div className="text-sm text-gray-600 font-medium">Protected Data</div>
               </div>
-              <div className="w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-pulse transition-opacity"></div>
             </div>
             
-            <div className="group flex items-center space-x-3 bg-white/90 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-110 hover:-translate-y-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                <span className="text-white text-lg">📱</span>
+            <div className="flex items-center space-x-4 bg-white rounded-xl px-8 py-4 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 bg-eeu-green rounded-full flex items-center justify-center shadow-md">
+                <Users className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-sm font-bold text-gray-800 group-hover:text-orange-600 transition-colors">Mobile Friendly</div>
-                <div className="text-xs text-gray-500">Any Device</div>
+                <div className="text-lg font-bold text-eeu-green">Customer Focus</div>
+                <div className="text-sm text-gray-600 font-medium">Your Satisfaction</div>
               </div>
-              <div className="w-2 h-2 bg-orange-400 rounded-full opacity-0 group-hover:opacity-100 animate-pulse transition-opacity"></div>
             </div>
           </div>
           
-          {/* Enhanced Welcome Message */}
-          <div className="group bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30 max-w-4xl mx-auto mb-8 hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:scale-105 relative overflow-hidden">
-            {/* Animated Background Elements */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-green-200/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-orange-200/20 to-yellow-200/20 rounded-full translate-y-12 -translate-x-12 group-hover:scale-150 transition-transform duration-700"></div>
-            
-            <div className="relative z-10">
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-12 h-12 bg-gradient-eeu rounded-full flex items-center justify-center mr-4 group-hover:rotate-12 transition-transform duration-300">
-                  <span className="text-white text-2xl">👋</span>
+          {/* Modern Welcome Message with EEU Brand Colors */}
+          <div className="bg-white rounded-2xl p-10 shadow-xl border-2 border-eeu-orange/20 max-w-4xl mx-auto mb-8 hover:shadow-2xl hover:border-eeu-orange transition-all duration-300">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center mb-6">
+                <div className="w-16 h-16 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-lg">
+                  <Users className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-800 group-hover:text-transparent group-hover:bg-gradient-eeu group-hover:bg-clip-text transition-all duration-300">
+                <h2 className="text-4xl font-bold text-eeu-green">
                   Welcome to Your Customer Portal
                 </h2>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="text-center p-4 bg-white/50 rounded-xl group-hover:bg-white/80 transition-all duration-300">
-                  <div className="text-2xl mb-2">📋</div>
-                  <div className="font-semibold text-gray-700">Submit</div>
-                  <div className="text-sm text-gray-500">Complaints</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg transition-all duration-300">
+                  <div className="w-12 h-12 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                    <FileText className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="font-bold text-eeu-orange text-lg">Submit</div>
+                  <div className="text-gray-700 font-medium">Complaints</div>
                 </div>
-                <div className="text-center p-4 bg-white/50 rounded-xl group-hover:bg-white/80 transition-all duration-300">
-                  <div className="text-2xl mb-2">📊</div>
-                  <div className="font-semibold text-gray-700">Track</div>
-                  <div className="text-sm text-gray-500">Progress</div>
+                <div className="text-center p-6 bg-gradient-to-br from-eeu-green/10 to-green-100/50 rounded-xl border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-lg transition-all duration-300">
+                  <div className="w-12 h-12 bg-eeu-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                    <Clock className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="font-bold text-eeu-green text-lg">Track</div>
+                  <div className="text-gray-700 font-medium">Progress</div>
                 </div>
-                <div className="text-center p-4 bg-white/50 rounded-xl group-hover:bg-white/80 transition-all duration-300">
-                  <div className="text-2xl mb-2">⚡</div>
-                  <div className="font-semibold text-gray-700">Manage</div>
-                  <div className="text-sm text-gray-500">Account</div>
+                <div className="text-center p-6 bg-gradient-to-br from-eeu-orange/10 to-orange-100/50 rounded-xl border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-lg transition-all duration-300">
+                  <div className="w-12 h-12 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="font-bold text-eeu-orange text-lg">Manage</div>
+                  <div className="text-gray-700 font-medium">Account</div>
                 </div>
               </div>
               

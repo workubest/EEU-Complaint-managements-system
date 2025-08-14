@@ -145,9 +145,9 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Enhanced Title Section with White Text and Shadows */}
-          <div className="space-y-4">
-            <div className="relative animate-slide-up">
+          {/* Modern Title Section with EEU Brand Colors */}
+          <div className="space-y-6">
+            <div className="relative">
               <h1 className="text-5xl lg:text-6xl font-bold text-white drop-shadow-2xl shadow-black/50 relative z-10">
                 {t('login.title')}
               </h1>
@@ -156,10 +156,10 @@ const LandingPage: React.FC = () => {
                 {t('login.title')}
               </h1>
             </div>
-            <p className="text-xl lg:text-2xl text-gray-700 font-medium animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl lg:text-2xl text-eeu-green font-semibold">
               የኢትዮጵያ ኤሌክትሪክ አገልግሎት
             </p>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.4s' }}>
+            <p className="text-lg text-gray-700 max-w-2xl mx-auto font-medium">
               {t('landing.welcome_description')}
             </p>
           </div>
@@ -170,10 +170,10 @@ const LandingPage: React.FC = () => {
       <section className="py-16 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4 animate-slide-up">
+            <h2 className="text-4xl font-bold text-eeu-orange mb-4">
               Choose Your Portal
             </h2>
-            <p className="text-xl text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl text-eeu-green font-medium">
               Select the appropriate portal for your needs
             </p>
           </div>
@@ -181,18 +181,15 @@ const LandingPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Customer Portal */}
             <Card 
-              className="group shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border-2 border-eeu-orange/30 hover:border-eeu-orange hover:scale-105 bg-white/80 backdrop-blur-sm relative overflow-hidden" 
+              className="shadow-xl border-2 border-eeu-orange bg-white cursor-pointer hover:shadow-2xl transition-shadow duration-300" 
               onClick={() => navigate('/customer-portal')}
             >
-              {/* Animated Background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-orange-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              <CardHeader className="text-center pb-4 relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <FileText className="w-10 h-10 text-white" />
+              <CardHeader className="text-center pb-6 bg-gradient-to-br from-eeu-orange to-orange-600 text-white rounded-t-lg">
+                <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <FileText className="w-12 h-12 text-white" />
                 </div>
                 <div className="relative">
-                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10 group-hover:text-white transition-colors duration-300">
+                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
                     {t('landing.customer_portal')}
                   </CardTitle>
                   {/* Enhanced shadow effect */}
@@ -201,57 +198,54 @@ const LandingPage: React.FC = () => {
                   </CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="text-center relative z-10">
-                <p className="text-gray-600 mb-6 text-lg">
+              <CardContent className="text-center p-8">
+                <p className="text-gray-700 mb-8 text-lg font-medium">
                   {t('landing.customer_portal_description')}
                 </p>
-                <ul className="text-left space-y-3 mb-8">
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-green rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                <ul className="text-left space-y-4 mb-8">
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.file_complaints')}
                   </li>
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-green rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.track_status')}
                   </li>
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-green rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.account_lookup')}
                   </li>
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-green rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-green rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.multilingual')}
                   </li>
                 </ul>
-                <Button className="w-full bg-gradient-to-r from-eeu-orange to-orange-600 hover:from-orange-600 hover:to-eeu-orange text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105" size="lg">
+                <Button className="w-full bg-eeu-orange hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-lg" size="lg">
                   {t('landing.access_customer_portal')}
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-3 w-6 h-6" />
                 </Button>
               </CardContent>
             </Card>
 
             {/* Staff Login */}
             <Card 
-              className="group shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border-2 border-eeu-green/30 hover:border-eeu-green hover:scale-105 bg-white/80 backdrop-blur-sm relative overflow-hidden" 
+              className="shadow-xl border-2 border-eeu-green bg-white cursor-pointer hover:shadow-2xl transition-shadow duration-300" 
               onClick={() => navigate('/login')}
             >
-              {/* Animated Background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-green-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              <CardHeader className="text-center pb-4 relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <Shield className="w-10 h-10 text-white" />
+              <CardHeader className="text-center pb-6 bg-gradient-to-br from-eeu-green to-green-600 text-white rounded-t-lg">
+                <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Shield className="w-12 h-12 text-white" />
                 </div>
                 <div className="relative">
-                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10 group-hover:text-white transition-colors duration-300">
+                  <CardTitle className="text-3xl font-bold text-white drop-shadow-lg shadow-black/50 relative z-10">
                     {t('landing.staff_portal')}
                   </CardTitle>
                   {/* Enhanced shadow effect */}
@@ -260,39 +254,39 @@ const LandingPage: React.FC = () => {
                   </CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="text-center relative z-10">
-                <p className="text-gray-600 mb-6 text-lg">
+              <CardContent className="text-center p-8">
+                <p className="text-gray-700 mb-8 text-lg font-medium">
                   {t('landing.staff_portal_description')}
                 </p>
-                <ul className="text-left space-y-3 mb-8">
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-orange rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                <ul className="text-left space-y-4 mb-8">
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.manage_complaints')}
                   </li>
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-orange rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.analytics_reports')}
                   </li>
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-orange rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.user_management')}
                   </li>
-                  <li className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors">
-                    <div className="w-6 h-6 bg-eeu-orange rounded-full flex items-center justify-center mr-3">
-                      <CheckCircle className="w-4 h-4 text-white" />
+                  <li className="flex items-center text-gray-800 font-medium">
+                    <div className="w-8 h-8 bg-eeu-orange rounded-full flex items-center justify-center mr-4 shadow-md">
+                      <CheckCircle className="w-5 h-5 text-white" />
                     </div>
                     {t('landing.feature.role_permissions')}
                   </li>
                 </ul>
-                <Button className="w-full bg-gradient-to-r from-eeu-green to-green-600 hover:from-green-600 hover:to-eeu-green text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105" size="lg">
+                <Button className="w-full bg-eeu-green hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-lg" size="lg">
                   {t('landing.staff_login')}
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-3 w-6 h-6" />
                 </Button>
               </CardContent>
             </Card>
@@ -304,68 +298,67 @@ const LandingPage: React.FC = () => {
       <section className="py-16 bg-white/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h3 className="text-4xl font-bold text-gray-800 mb-4 animate-slide-up">
+            <h3 className="text-4xl font-bold text-eeu-green mb-4">
               {t('landing.contact_title')}
             </h3>
-            <p className="text-xl text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl text-eeu-orange font-medium">
               {t('landing.contact_description')}
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-16 h-16 bg-gradient-to-br from-eeu-orange to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <Phone className="w-8 h-8 text-white" />
+            <div className="text-center bg-white rounded-xl p-8 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl transition-all duration-300">
+              <div className="w-20 h-20 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Phone className="w-10 h-10 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-800 mb-3">
+              <h4 className="text-2xl font-bold text-eeu-orange mb-4">
                 {t('landing.contact.phone')}
               </h4>
-              <p className="text-gray-600 font-medium">+251-11-123-4567</p>
-              <p className="text-gray-600 font-medium">+251-11-123-4568</p>
+              <p className="text-gray-700 font-semibold text-lg">+251-11-123-4567</p>
+              <p className="text-gray-700 font-semibold text-lg">+251-11-123-4568</p>
             </div>
             
-            <div className="text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-16 h-16 bg-gradient-to-br from-eeu-green to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <Mail className="w-8 h-8 text-white" />
+            <div className="text-center bg-white rounded-xl p-8 shadow-lg border-2 border-eeu-green/20 hover:border-eeu-green hover:shadow-xl transition-all duration-300">
+              <div className="w-20 h-20 bg-eeu-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Mail className="w-10 h-10 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-800 mb-3">
+              <h4 className="text-2xl font-bold text-eeu-green mb-4">
                 {t('landing.contact.email')}
               </h4>
-              <p className="text-gray-600 font-medium">complaints@eeu.gov.et</p>
-              <p className="text-gray-600 font-medium">support@eeu.gov.et</p>
+              <p className="text-gray-700 font-semibold text-lg">complaints@eeu.gov.et</p>
+              <p className="text-gray-700 font-semibold text-lg">support@eeu.gov.et</p>
             </div>
             
-            <div className="text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <Clock className="w-8 h-8 text-white" />
+            <div className="text-center bg-white rounded-xl p-8 shadow-lg border-2 border-eeu-orange/20 hover:border-eeu-orange hover:shadow-xl transition-all duration-300">
+              <div className="w-20 h-20 bg-eeu-orange rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Clock className="w-10 h-10 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-gray-800 mb-3">
+              <h4 className="text-2xl font-bold text-eeu-orange mb-4">
                 {t('landing.contact.hours')}
               </h4>
-              <p className="text-gray-600 font-medium">{t('landing.contact.weekdays')}</p>
-              <p className="text-gray-600 font-medium">{t('landing.contact.weekend')}</p>
+              <p className="text-gray-700 font-semibold text-lg">{t('landing.contact.weekdays')}</p>
+              <p className="text-gray-700 font-semibold text-lg">{t('landing.contact.weekend')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-eeu-orange/10 to-eeu-green/10"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <footer className="bg-gradient-to-r from-eeu-green to-eeu-orange text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="mb-6">
-              <div className="w-16 h-16 bg-gradient-eeu rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-white" />
+            <div className="mb-8">
+              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Zap className="w-10 h-10 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-white mb-2">{t('login.title')}</h4>
-              <p className="text-gray-300">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>
+              <h4 className="text-2xl font-bold text-white mb-3 drop-shadow-lg">{t('login.title')}</h4>
+              <p className="text-white/90 text-lg font-medium">የኢትዮጵያ ኤሌክትሪክ አገልግሎት</p>
             </div>
-            <div className="border-t border-gray-700 pt-6">
-              <p className="text-gray-400 text-lg">
+            <div className="border-t border-white/30 pt-8">
+              <p className="text-white/90 text-lg font-medium">
                 © 2024 {t('login.title')}. {t('landing.footer.rights')}
               </p>
-              <p className="text-gray-400 mt-2 font-medium">
+              <p className="text-white/80 mt-3 font-medium">
                 {t('landing.footer.version')} 1.0.0
               </p>
             </div>
