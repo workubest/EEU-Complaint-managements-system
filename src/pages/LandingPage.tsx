@@ -116,11 +116,11 @@ const LandingPage: React.FC = () => {
             <div className="absolute inset-12 border-2 border-transparent border-t-eeu-green border-b-eeu-orange rounded-full animate-spin opacity-20 group-hover:opacity-40 transition-opacity duration-500" style={{ animationDuration: '6s' }}></div>
             
             {/* Enhanced Sparkle Effects */}
-            <div className="absolute top-12 right-12 w-4 h-4 bg-eeu-orange rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300">
-              <Star className="w-4 h-4 text-white" />
+            <div className="absolute top-12 right-12 w-4 h-4 bg-white rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300 shadow-lg">
+              <Star className="w-4 h-4 text-eeu-orange" />
             </div>
-            <div className="absolute bottom-16 left-16 w-3 h-3 bg-eeu-green rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '0.4s' }}>
-              <Sparkles className="w-3 h-3 text-white" />
+            <div className="absolute bottom-16 left-16 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300 shadow-lg" style={{ animationDelay: '0.4s' }}>
+              <Sparkles className="w-3 h-3 text-eeu-green" />
             </div>
             <div className="absolute top-20 left-20 w-2 h-2 bg-yellow-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '0.8s' }}></div>
             <div className="absolute bottom-20 right-20 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-300" style={{ animationDelay: '1.2s' }}></div>

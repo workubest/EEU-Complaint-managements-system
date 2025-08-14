@@ -153,14 +153,12 @@ export function Header({ onMenuClick }: HeaderProps) {
             {/* Organization Text */}
             <div className="hidden sm:block">
               <div className="relative inline-block mb-1">
-                <div className="absolute inset-0 bg-gradient-eeu rounded-lg blur-sm opacity-40"></div>
-                <h1 className="relative text-lg font-bold text-white px-4 py-2 bg-gradient-eeu rounded-lg shadow-lg">
+                <h1 className="text-lg font-bold text-eeu-orange drop-shadow-lg">
                   Ethiopian Electric Utility
                 </h1>
               </div>
               <div className="relative inline-block">
-                <div className="absolute inset-0 bg-gradient-eeu-reverse rounded-lg blur-sm opacity-35"></div>
-                <p className="relative text-sm font-semibold text-white px-3 py-1 bg-gradient-eeu-reverse rounded-lg shadow-md">
+                <p className="text-sm font-semibold text-eeu-green">
                   Complaint Management System
                 </p>
               </div>
@@ -169,8 +167,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             {/* Mobile Text */}
             <div className="sm:hidden">
               <div className="relative inline-block">
-                <div className="absolute inset-0 bg-gradient-eeu rounded-lg blur-sm opacity-40"></div>
-                <h1 className="relative text-sm font-bold text-white px-3 py-1 bg-gradient-eeu rounded-lg shadow-md">
+                <h1 className="text-sm font-bold text-eeu-orange drop-shadow-lg">
                   EEU
                 </h1>
               </div>

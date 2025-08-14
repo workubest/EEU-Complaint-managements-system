@@ -51,7 +51,7 @@ export function FloatingActionButton() {
               onClick={action.action}
               className={`w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 ${action.color}`}
             >
-              <action.icon className="h-5 w-5 text-white" />
+              <action.icon className="h-5 w-5 text-eeu-orange" />
             </Button>
           </div>
         ))}
