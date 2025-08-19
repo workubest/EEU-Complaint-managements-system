@@ -111,7 +111,7 @@ export function Login() {
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4 relative overflow-hidden">
       {/* Subtle Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-eeu-orange/8 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-eeu-green/8 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/3 rounded-full blur-3xl"></div>
@@ -135,16 +135,16 @@ export function Login() {
       </div>
 
       <div className="w-full max-w-md z-10">
-        <Card className="shadow-2xl border-2 border-eeu-orange/20 bg-white/95 backdrop-blur-sm hover:shadow-3xl hover:border-eeu-orange/40 transition-all duration-500 transform hover:scale-105 relative overflow-hidden">
+        <Card className="shadow-2xl border-2 border-eeu-orange/20 bg-white/95 backdrop-blur-sm hover:shadow-3xl hover:border-eeu-orange/40 transition-all duration-500 transform hover:scale-105 relative overflow-visible">
           {/* Card Background Animation */}
-          <div className="absolute inset-0 bg-gradient-to-br from-eeu-green/5 via-transparent to-eeu-orange/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-eeu-green/5 via-transparent to-eeu-orange/5 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
           <CardHeader className="text-center pb-3 relative">
             {/* Logo and Title Section */}
             <div className="flex flex-col items-center space-y-3 mb-6">
               {/* Logo Container */}
               <div className="relative group">
                 {/* Subtle Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-eeu rounded-full blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-eeu rounded-full blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none"></div>
                 
                 {/* Main Logo */}
                 <img 
@@ -154,7 +154,7 @@ export function Login() {
                 />
                 
                 {/* Simple Border Ring */}
-                <div className="absolute inset-0 border-2 border-transparent border-t-eeu-orange border-r-eeu-green rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 border-2 border-transparent border-t-eeu-orange border-r-eeu-green rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300 pointer-events-none"></div>
               </div>
               
               {/* Enhanced Title Section with EEU Brand Colors */}
@@ -197,7 +197,7 @@ export function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-12 border-2 border-eeu-green/30 focus:border-eeu-green focus:ring-2 focus:ring-eeu-green/20 transition-all duration-300 rounded-lg bg-gradient-to-r from-white to-eeu-green/5"
+                  className="h-12 border-2 border-eeu-green/30 focus:border-eeu-green focus:ring-2 focus:ring-eeu-green/20 transition-all duration-300 rounded-lg bg-gradient-to-r from-white to-eeu-green/10"
                 />
               </div>
               
@@ -217,7 +217,7 @@ export function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-12 pr-12 border-2 border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300 rounded-lg bg-gradient-to-r from-white to-eeu-orange/5"
+                    className="h-12 pr-12 border-2 border-eeu-orange/30 focus:border-eeu-orange focus:ring-2 focus:ring-eeu-orange/20 transition-all duration-300 rounded-lg bg-gradient-to-r from-white to-eeu-orange/10"
                   />
                   <Button
                     type="button"
@@ -238,7 +238,7 @@ export function Login() {
               {/* Submit Button */}
               <button 
                 type="submit" 
-                className="w-full h-12 text-white font-bold rounded-lg cursor-pointer hover:opacity-90 transition-opacity duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" 
+                className="w-full h-12 text-white font-bold rounded-lg cursor-pointer hover:opacity-90 transition-opacity duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 disabled={isLoading}
                 style={{ 
                   background: 'linear-gradient(135deg, #FF8C42 0%, #4CAF50 100%)',
